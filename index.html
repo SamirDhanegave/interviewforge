@@ -1,0 +1,1384 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InterviewForge — IT Interview Mastery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #09090f;
+  --surface: #0f0f1a;
+  --surface2: #14141f;
+  --surface3: #1a1a28;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #eeeef5;
+  --muted: #7878a0;
+  --accent: #6e6bff;
+  --accent2: #ff6b6b;
+  --accent3: #00d4aa;
+  --gold: #f0c060;
+  --green: #4ade80;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; overflow-x: hidden; }
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.3;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* ===== NAV ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 60px;
+  transition: all 0.4s;
+}
+nav.scrolled {
+  background: rgba(9,9,15,0.9); border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px); padding: 12px 60px;
+}
+.nav-logo {
+  font-family: 'Instrument Serif', serif; font-size: 1.5rem;
+  display: flex; align-items: center; gap: 9px; cursor: pointer; text-decoration: none; color: var(--text);
+}
+.logo-badge {
+  width: 30px; height: 30px; border-radius: 7px;
+  background: linear-gradient(135deg, var(--accent), #a78bff);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-family: 'DM Mono', monospace; font-weight: 500; color: #fff;
+}
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; cursor: pointer; }
+.nav-links a:hover { color: var(--text); }
+.nav-cta {
+  background: var(--accent); color: #fff; border: none;
+  padding: 9px 20px; border-radius: 8px; font-family: 'Syne', sans-serif;
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; cursor: pointer;
+  transition: all 0.2s; text-transform: uppercase;
+}
+.nav-cta:hover { background: #8886ff; transform: translateY(-1px); }
+
+/* ===== PAGE TRANSITIONS ===== */
+.page { display: none; }
+.page.active { display: block; }
+.page.animating { animation: pageIn 0.3s ease forwards; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  padding: 120px 40px 80px; position: relative; overflow: hidden;
+}
+.hero::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(110,107,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(110,107,255,0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+}
+.orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; }
+.orb1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(110,107,255,0.18) 0%, transparent 70%); top: -100px; left: 50%; transform: translateX(-50%); }
+.orb2 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(0,212,170,0.12) 0%, transparent 70%); bottom: 100px; right: -50px; }
+.orb3 { width: 250px; height: 250px; background: radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 70%); bottom: 150px; left: -50px; }
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); background: rgba(110,107,255,0.1); border: 1px solid rgba(110,107,255,0.2);
+  padding: 6px 16px; border-radius: 100px; margin-bottom: 28px; position: relative; z-index: 2;
+  animation: fadeUp 0.8s ease both;
+}
+.hero-title {
+  font-family: 'Instrument Serif', serif; font-size: clamp(3rem, 8vw, 6.5rem);
+  line-height: 1.0; letter-spacing: -0.03em; max-width: 900px;
+  position: relative; z-index: 2; animation: fadeUp 0.8s 0.1s ease both;
+}
+.hero-title em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--accent) 0%, #a78bff 50%, var(--accent2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-sub { font-size: 1.1rem; color: var(--muted); max-width: 560px; line-height: 1.7; margin-top: 24px; font-weight: 400; position: relative; z-index: 2; animation: fadeUp 0.8s 0.2s ease both; }
+.hero-actions { display: flex; gap: 14px; margin-top: 40px; position: relative; z-index: 2; animation: fadeUp 0.8s 0.3s ease both; }
+.stats-bar {
+  display: flex; margin-top: 70px; border: 1px solid var(--border);
+  border-radius: 14px; background: var(--surface); overflow: hidden;
+  position: relative; z-index: 2; animation: fadeUp 0.8s 0.4s ease both;
+}
+.stat-item { padding: 22px 40px; border-right: 1px solid var(--border); text-align: center; }
+.stat-item:last-child { border-right: none; }
+.stat-num { font-family: 'Instrument Serif', serif; font-size: 2rem; line-height: 1; background: linear-gradient(135deg, var(--text), var(--muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.stat-label { font-size: 0.72rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+  background: var(--accent); color: #fff; padding: 14px 32px; border-radius: 10px; border: none;
+  font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.04em; cursor: pointer;
+  transition: all 0.25s; position: relative; overflow: hidden;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(110,107,255,0.4); background: #8886ff; }
+.btn-ghost {
+  background: transparent; color: var(--text); padding: 14px 28px; border-radius: 10px;
+  border: 1px solid var(--border2); font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 600;
+  letter-spacing: 0.04em; cursor: pointer; transition: all 0.25s;
+}
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+/* ===== TICKER ===== */
+.ticker-wrap { overflow: hidden; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 12px 0; }
+.ticker { display: flex; animation: ticker 30s linear infinite; width: max-content; }
+.ticker-item { padding: 0 32px; font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; border-right: 1px solid var(--border); }
+.ticker-item span { color: var(--accent); margin-right: 8px; }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ===== ROLES SECTION ===== */
+.section { padding: 100px 60px; max-width: 1300px; margin: 0 auto; }
+.section-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 16px; }
+.section-title { font-family: 'Instrument Serif', serif; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1; letter-spacing: -0.02em; max-width: 600px; }
+.section-title span { font-style: italic; color: var(--muted); }
+.roles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-top: 48px; }
+.role-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  padding: 24px 20px; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden;
+}
+.role-card:hover { border-color: var(--border2); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(110,107,255,0.2); border-color: rgba(110,107,255,0.3); }
+.role-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 16px; background: rgba(255,255,255,0.05); }
+.role-name { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; line-height: 1.3; }
+.role-count { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.05em; }
+.role-arrow { position: absolute; top: 20px; right: 20px; color: var(--muted); font-size: 0.9rem; transition: all 0.25s; opacity: 0; }
+.role-card:hover .role-arrow { opacity: 1; transform: translate(2px, -2px); }
+
+/* ===== HOW IT WORKS ===== */
+.steps-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 60px; background: var(--border); border-radius: 16px; overflow: hidden; }
+.step-item { background: var(--surface); padding: 44px 36px; position: relative; transition: background 0.3s; }
+.step-item:hover { background: var(--surface2); }
+.step-num { font-family: 'Instrument Serif', serif; font-size: 3.5rem; line-height: 1; color: rgba(255,255,255,0.04); position: absolute; top: 20px; right: 28px; }
+.step-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(110,107,255,0.1); border: 1px solid rgba(110,107,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 20px; }
+.step-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+.step-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.65; }
+
+/* ===== CTA ===== */
+.cta-section {
+  margin: 0 60px 100px; background: linear-gradient(135deg, rgba(110,107,255,0.12) 0%, rgba(0,212,170,0.06) 50%, rgba(255,107,107,0.08) 100%);
+  border: 1px solid var(--border); border-radius: 24px; padding: 80px 60px; text-align: center; position: relative; overflow: hidden;
+}
+.cta-title { font-family: 'Instrument Serif', serif; font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.05; letter-spacing: -0.02em; position: relative; z-index: 1; }
+.cta-sub { font-size: 1rem; color: var(--muted); margin: 16px auto 0; position: relative; z-index: 1; max-width: 500px; line-height: 1.6; }
+.cta-actions { display: flex; justify-content: center; gap: 14px; margin-top: 36px; position: relative; z-index: 1; }
+
+/* ===== FOOTER ===== */
+footer { border-top: 1px solid var(--border); padding: 40px 60px; display: flex; align-items: center; justify-content: space-between; }
+.footer-logo { font-family: 'Instrument Serif', serif; font-size: 1.3rem; display: flex; align-items: center; gap: 8px; }
+.footer-text { font-size: 0.78rem; color: var(--muted); }
+.footer-links { display: flex; gap: 28px; }
+.footer-links a { font-size: 0.78rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--text); }
+
+/* ===== ROLE DETAIL PAGE ===== */
+.role-page { padding-top: 80px; min-height: 100vh; }
+.role-header {
+  padding: 50px 60px 40px; border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(110,107,255,0.06) 0%, transparent 100%);
+  position: relative; overflow: hidden;
+}
+.role-header::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(110,107,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(110,107,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, black 40%, transparent 100%);
+}
+.back-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--muted); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; background: none; border: none; cursor: pointer;
+  transition: color 0.2s; margin-bottom: 28px; font-family: 'Syne', sans-serif;
+}
+.back-btn:hover { color: var(--text); }
+.role-header-inner { display: flex; align-items: flex-start; gap: 20px; position: relative; z-index: 1; }
+.role-header-icon { width: 60px; height: 60px; border-radius: 14px; background: rgba(110,107,255,0.15); border: 1px solid rgba(110,107,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; }
+.role-header-title { font-family: 'Instrument Serif', serif; font-size: 2.6rem; letter-spacing: -0.02em; line-height: 1.1; }
+.role-header-desc { color: var(--muted); font-size: 0.92rem; line-height: 1.65; margin-top: 8px; max-width: 650px; }
+.role-meta { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
+.meta-badge {
+  font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em;
+  padding: 5px 12px; border-radius: 6px; text-transform: uppercase;
+}
+.meta-badge.q { background: rgba(110,107,255,0.1); border: 1px solid rgba(110,107,255,0.2); color: var(--accent); }
+.meta-badge.c { background: rgba(0,212,170,0.08); border: 1px solid rgba(0,212,170,0.2); color: var(--accent3); }
+.meta-badge.t { background: rgba(240,192,96,0.08); border: 1px solid rgba(240,192,96,0.2); color: var(--gold); }
+
+/* ===== ROLE PAGE LAYOUT ===== */
+.role-body { display: flex; min-height: calc(100vh - 300px); }
+.role-sidebar {
+  width: 260px; flex-shrink: 0; border-right: 1px solid var(--border);
+  padding: 28px 0; position: sticky; top: 80px; height: calc(100vh - 80px); overflow-y: auto;
+}
+.role-sidebar::-webkit-scrollbar { width: 4px; }
+.role-sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+.sidebar-section { padding: 0 20px 20px; }
+.sidebar-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; padding: 0 4px; }
+.sidebar-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px;
+  cursor: pointer; transition: all 0.2s; font-size: 0.82rem; font-weight: 600; margin-bottom: 2px;
+  border: 1px solid transparent;
+}
+.sidebar-item:hover { background: var(--surface); border-color: var(--border); }
+.sidebar-item.active { background: rgba(110,107,255,0.1); border-color: rgba(110,107,255,0.2); color: var(--accent); }
+.sidebar-item .scount { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); margin-left: auto; }
+.sidebar-divider { height: 1px; background: var(--border); margin: 12px 20px; }
+
+/* ===== CONTENT AREA ===== */
+.role-content { flex: 1; padding: 36px 50px; max-width: 900px; }
+
+/* TABS */
+.tabs { display: flex; gap: 4px; margin-bottom: 32px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 4px; width: fit-content; }
+.tab {
+  padding: 8px 20px; border-radius: 7px; font-size: 0.82rem; font-weight: 700;
+  cursor: pointer; transition: all 0.2s; letter-spacing: 0.04em; border: none;
+  background: none; color: var(--muted); font-family: 'Syne', sans-serif;
+}
+.tab.active { background: var(--accent); color: #fff; }
+.tab:hover:not(.active) { color: var(--text); }
+
+/* TOPIC HEADER */
+.topic-header { margin-bottom: 28px; }
+.topic-title { font-family: 'Instrument Serif', serif; font-size: 1.9rem; letter-spacing: -0.02em; margin-bottom: 8px; }
+.topic-desc { font-size: 0.87rem; color: var(--muted); line-height: 1.65; }
+
+/* Q&A CARDS */
+.qa-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  margin-bottom: 16px; overflow: hidden; transition: border-color 0.2s;
+}
+.qa-card:hover { border-color: var(--border2); }
+.qa-question {
+  padding: 20px 24px; cursor: pointer; display: flex; align-items: flex-start; gap: 14px;
+  transition: background 0.2s;
+}
+.qa-question:hover { background: rgba(255,255,255,0.02); }
+.qa-num { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--accent); background: rgba(110,107,255,0.1); border: 1px solid rgba(110,107,255,0.15); padding: 3px 8px; border-radius: 5px; flex-shrink: 0; margin-top: 2px; letter-spacing: 0.05em; }
+.qa-q-text { font-size: 0.95rem; font-weight: 700; line-height: 1.4; flex: 1; }
+.qa-badges { display: flex; gap: 6px; align-items: center; margin-left: 10px; flex-shrink: 0; }
+.diff-badge { font-family: 'DM Mono', monospace; font-size: 0.6rem; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+.diff-easy { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+.diff-medium { background: rgba(240,192,96,0.1); color: var(--gold); border: 1px solid rgba(240,192,96,0.2); }
+.diff-hard { background: rgba(255,107,107,0.1); color: var(--accent2); border: 1px solid rgba(255,107,107,0.2); }
+.qa-chevron { color: var(--muted); transition: transform 0.3s; font-size: 0.8rem; flex-shrink: 0; margin-top: 4px; }
+.qa-card.open .qa-chevron { transform: rotate(180deg); }
+.qa-answer { display: none; padding: 0 24px 24px; border-top: 1px solid var(--border); padding-top: 20px; }
+.qa-card.open .qa-answer { display: block; }
+.qa-answer-text { font-size: 0.88rem; color: var(--muted); line-height: 1.75; }
+.qa-answer-text strong { color: var(--text); font-weight: 700; }
+.qa-answer-text code {
+  font-family: 'DM Mono', monospace; font-size: 0.82rem;
+  background: rgba(110,107,255,0.08); border: 1px solid rgba(110,107,255,0.15);
+  padding: 1px 6px; border-radius: 4px; color: #a78bff;
+}
+.qa-answer-text .highlight-box {
+  background: rgba(0,212,170,0.05); border-left: 3px solid var(--accent3);
+  border-radius: 0 8px 8px 0; padding: 14px 16px; margin: 14px 0;
+  font-size: 0.85rem; line-height: 1.7;
+}
+.qa-tip { display: flex; align-items: flex-start; gap: 10px; margin-top: 14px; background: rgba(240,192,96,0.05); border: 1px solid rgba(240,192,96,0.12); border-radius: 8px; padding: 12px 14px; }
+.qa-tip-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase; flex-shrink: 0; padding-top: 2px; }
+.qa-tip-text { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+/* CODE CHALLENGE */
+.challenge-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  margin-bottom: 20px; overflow: hidden;
+}
+.challenge-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.challenge-title-row { display: flex; align-items: center; gap: 12px; }
+.challenge-icon { font-size: 1.2rem; }
+.challenge-name { font-size: 1rem; font-weight: 700; }
+.challenge-meta { display: flex; gap: 8px; align-items: center; }
+.challenge-body { padding: 24px; }
+.challenge-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+.challenge-desc strong { color: var(--text); }
+.code-block {
+  background: #0a0a14; border: 1px solid var(--border2); border-radius: 10px;
+  overflow: hidden; margin: 16px 0;
+}
+.code-block-header { padding: 10px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.code-dots { display: flex; gap: 6px; }
+.code-dot { width: 10px; height: 10px; border-radius: 50%; }
+.code-dot:nth-child(1) { background: #ff5f56; } .code-dot:nth-child(2) { background: #ffbd2e; } .code-dot:nth-child(3) { background: #27c93f; }
+.code-lang { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+.code-block pre { padding: 20px; overflow-x: auto; font-family: 'DM Mono', monospace; font-size: 0.82rem; line-height: 1.7; color: #c9d1d9; }
+.code-block pre .kw { color: #ff7b72; } /* keyword */
+.code-block pre .fn { color: #d2a8ff; } /* function */
+.code-block pre .str { color: #a5d6ff; } /* string */
+.code-block pre .cm { color: #8b949e; } /* comment */
+.code-block pre .num { color: #79c0ff; } /* number */
+.code-block pre .cls { color: #ffa657; } /* class */
+.solution-toggle {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em;
+  background: rgba(110,107,255,0.1); border: 1px solid rgba(110,107,255,0.2);
+  color: var(--accent); padding: 8px 16px; border-radius: 8px; cursor: pointer;
+  transition: all 0.2s; font-family: 'Syne', sans-serif; margin-top: 4px;
+}
+.solution-toggle:hover { background: rgba(110,107,255,0.2); }
+.solution { display: none; margin-top: 16px; }
+.solution.open { display: block; }
+.io-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+.io-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+.io-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+.io-val { font-family: 'DM Mono', monospace; font-size: 0.82rem; color: var(--accent3); line-height: 1.5; }
+.complexity-row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.complexity-badge { font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--muted); }
+.complexity-badge span { color: var(--text); }
+
+/* Progress tracker */
+.progress-bar-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 28px; }
+.progress-bar-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--muted); margin-bottom: 10px; }
+.progress-bar-label span:last-child { color: var(--accent); font-weight: 700; }
+.progress-bar-bg { height: 5px; background: rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent3)); border-radius: 10px; transition: width 0.5s ease; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Responsive */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; } nav.scrolled { padding: 12px 24px; }
+  .nav-links { display: none; }
+  .section { padding: 60px 24px; }
+  .cta-section { margin: 0 24px 60px; padding: 50px 28px; }
+  footer { flex-direction: column; gap: 20px; padding: 32px 24px; text-align: center; }
+  .steps-row { grid-template-columns: 1fr; }
+  .role-sidebar { display: none; }
+  .role-content { padding: 24px; }
+  .role-header { padding: 32px 24px; }
+  .stat-item { padding: 16px 24px; }
+  .io-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a class="nav-logo" onclick="goHome()" style="cursor:pointer">
+    <div class="logo-badge">IF</div>
+    InterviewForge
+  </a>
+  <ul class="nav-links">
+    <li><a onclick="goHomeAndScroll()" style="cursor:pointer">Roles</a></li>
+    
+  </ul>
+  <button class="nav-cta" onclick="goHomeAndScroll()">Explore Roles →</button>
+</nav>
+
+<!-- ==================== HOME PAGE ==================== -->
+<div class="page" id="page-home">
+
+  <section class="hero">
+    <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+    <div class="hero-eyebrow">🎯 Real Questions. Real Answers. Real Jobs.</div>
+    <h1 class="hero-title">Ace Every<br><em>IT Interview</em><br>You Walk Into</h1>
+    <p class="hero-sub">Role-specific Q&A banks and coding challenges curated from thousands of real interviews. Choose your track, study smart, walk in confident.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="scrollToRoles()">Explore All Roles &nbsp;→</button>
+      <button class="btn-ghost" onclick="openRole('frontend')">See Sample Questions</button>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">IT Roles</div></div>
+      <div class="stat-item"><div class="stat-num">200+</div><div class="stat-label">Questions</div></div>
+      <div class="stat-item"><div class="stat-num">60+</div><div class="stat-label">Coding Challenges</div></div>
+      <div class="stat-item"><div class="stat-num">140k+</div><div class="stat-label">Students Placed</div></div>
+    </div>
+  </section>
+
+  <div class="ticker-wrap"><div class="ticker" id="ticker"></div></div>
+
+  <section class="section" id="roles-section">
+    <div class="section-label">// choose your path</div>
+    <h2 class="section-title">Browse by <span>Role</span></h2>
+    <div class="roles-grid" id="roles-grid"></div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="section-label">// the process</div>
+    <h2 class="section-title">How It <span>Works</span></h2>
+    <div class="steps-row">
+      <div class="step-item"><div class="step-num">01</div><div class="step-icon">🎯</div><div class="step-title">Pick Your Role</div><p class="step-desc">Browse IT roles from frontend to DevOps, data science to cybersecurity. Select the one matching your target job.</p></div>
+      <div class="step-item"><div class="step-num">02</div><div class="step-icon">📖</div><div class="step-title">Study Topic by Topic</div><p class="step-desc">Each role is broken into key topics. Work through curated Q&A and coding challenges in logical sequence.</p></div>
+      <div class="step-item"><div class="step-num">03</div><div class="step-icon">✅</div><div class="step-title">Crack the Interview</div><p class="step-desc">Walk in knowing exactly what to expect — and the depth of answer that impresses interviewers at every level.</p></div>
+    </div>
+  </section>
+
+  <div class="cta-section">
+    <h2 class="cta-title">Ready to Forge Your<br><em style="font-family:'Instrument Serif',serif;font-style:italic;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Dream Offer?</em></h2>
+    <p class="cta-sub">Pick a role and start studying real questions asked at top companies — completely free.</p>
+    <div class="cta-actions">
+      <button class="btn-primary" style="font-size:1rem;padding:16px 40px" onclick="scrollToRoles()">Start Now →</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo"><div class="logo-badge" style="width:24px;height:24px;font-size:0.65rem">IF</div>InterviewForge</div>
+    <div class="footer-text">© 2026 InterviewForge. Built for ambitious IT folks.</div>
+    <!-- <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a></div> -->
+  </footer>
+</div>
+
+<!-- ==================== ROLE DETAIL PAGE ==================== -->
+<div class="page" id="page-role">
+  <div class="role-page">
+    <div class="role-header">
+      <button class="back-btn" onclick="goHome()">← Back to All Roles</button>
+      <div class="role-header-inner">
+        <div class="role-header-icon" id="rh-icon"></div>
+        <div>
+          <div class="role-header-title" id="rh-title"></div>
+          <div class="role-header-desc" id="rh-desc"></div>
+          <div class="role-meta" id="rh-meta"></div>
+        </div>
+      </div>
+    </div>
+    <div class="role-body">
+      <div class="role-sidebar" id="role-sidebar"></div>
+      <div class="role-content">
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab('qa',this)">Q &amp; A</button>
+          <button class="tab" onclick="switchTab('coding',this)">Coding Challenges</button>
+          <button class="tab" onclick="switchTab('tips',this)">Interview Tips</button>
+        </div>
+        <div id="tab-qa"></div>
+        <div id="tab-coding" style="display:none"></div>
+        <div id="tab-tips" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== DATA =====================
+const ROLES = [
+  {
+    id: 'frontend', icon: '⚡', name: 'Frontend Developer', color: '#6e6bff',
+    desc: 'Master HTML, CSS, JavaScript, React, performance optimization, and browser APIs. Covers everything asked at companies from startups to FAANG.',
+    topics: ['Core JavaScript','React & Hooks','HTML & CSS','Performance','Browser APIs','System Design'],
+    qa: [
+      { topic:'Core JavaScript', items: [
+        { q:'Explain the difference between var, let, and const.', diff:'easy', a:'<strong>var</strong> is function-scoped and hoisted (initialized as undefined). <strong>let</strong> and <strong>const</strong> are block-scoped and are in the "temporal dead zone" until their declaration. <strong>const</strong> prevents reassignment but does not make objects immutable — you can still mutate object properties.<div class="highlight-box">Use <code>const</code> by default, <code>let</code> when you need to reassign, and avoid <code>var</code> in modern code entirely.</div>', tip:'Interviewers love when you mention the temporal dead zone — most junior devs miss it.' },
+        { q:'What is event delegation and why is it useful?', diff:'medium', a:'Event delegation is the practice of attaching a single event listener to a <strong>parent element</strong> instead of multiple children. It works because events bubble up the DOM tree. When a child is clicked, the event propagates to the parent, which checks <code>event.target</code> to determine the source.<div class="highlight-box">Benefits: fewer event listeners (better memory), works for dynamically added elements, and simplifies cleanup.</div>', tip:'Give a concrete example: a click handler on a <code>&lt;ul&gt;</code> that handles clicks on all <code>&lt;li&gt;</code> children.' },
+        { q:'What is a closure and give a real-world use case?', diff:'medium', a:'A closure is a function that <strong>retains access to its outer scope\'s variables</strong> even after the outer function has returned. Every function in JavaScript is a closure.\n<div class="highlight-box">Real use cases: data privacy (module pattern), factory functions, memoization, and event handlers that remember configuration.</div>Example: a counter factory <code>makeCounter()</code> returns a function that increments a private <code>count</code> variable — the inner function "closes over" count.', tip:'Draw the scope chain on a whiteboard. Interviewers value visual thinkers.' },
+        { q:'Explain the JavaScript event loop and call stack.', diff:'hard', a:'JavaScript is single-threaded. The <strong>call stack</strong> executes synchronous code. Async operations (setTimeout, fetch, DOM events) are handled by Web APIs, which push callbacks to the <strong>task queue</strong> (macrotasks) or <strong>microtask queue</strong> (Promises, queueMicrotask).<div class="highlight-box">The event loop picks from the microtask queue FIRST (draining it completely) before picking one macrotask. This is why <code>Promise.resolve().then()</code> runs before <code>setTimeout(fn, 0)</code>.</div>', tip:'Mention Philip Roberts\' "What the heck is the event loop?" talk — it signals you\'ve done deep study.' },
+        { q:'What is prototype chain in JavaScript?', diff:'medium', a:'Every JavaScript object has an internal <code>[[Prototype]]</code> link to another object. Property lookup traverses this chain until it finds the property or reaches <code>null</code> (the end of the chain).<div class="highlight-box">When you do <code>arr.map()</code>, JavaScript looks up the chain: arr → Array.prototype → Object.prototype → null. <code>Array.prototype.map</code> is found and used.</div><strong>ES6 classes</strong> are syntactic sugar over this prototype-based inheritance.', tip:'' },
+      ]},
+      { topic:'React & Hooks', items:[
+        { q:'Explain useState vs useReducer — when to use which?', diff:'medium', a:'<strong>useState</strong> is ideal for simple, independent state values (toggles, form inputs). <strong>useReducer</strong> shines when state transitions are complex, depend on previous state, or multiple sub-values change together.<div class="highlight-box">Rule of thumb: if your setState logic has more than 2–3 conditions, or if you\'re passing multiple setState functions through props, switch to useReducer.</div>useReducer also makes testing easier — you can test the reducer function in isolation without React.', tip:'' },
+        { q:'What problem does useCallback solve? When is it NOT needed?', diff:'hard', a:'<code>useCallback</code> memoizes a function reference, preventing child components from re-rendering when the parent re-renders if the function is passed as a prop.<div class="highlight-box">However, it\'s <strong>not needed</strong> for most cases. The overhead of memoization can exceed its benefit. Only use it when: (1) the function is passed to a React.memo-wrapped child, or (2) the function is a dependency in useEffect/useMemo.</div>Premature optimization with useCallback is a common mistake — profile first.', tip:'Mentioning "premature optimization" signals senior-level thinking.' },
+        { q:'How does React reconciliation (Virtual DOM diffing) work?', diff:'hard', a:'React keeps a Virtual DOM — a lightweight JS representation of the real DOM. On state change, it creates a new Virtual DOM tree and diffs it against the previous one using the <strong>reconciliation algorithm</strong>.<div class="highlight-box">Key rules: (1) Elements of different types produce different trees. (2) Sibling elements with stable <code>key</code> props are matched by key — this is why keys matter in lists. (3) Component state is preserved when the same component type renders in the same position.</div>React Fiber (since v16) made this process incremental and interruptible.', tip:'' },
+        { q:'What are React Server Components and how do they differ from Client Components?', diff:'hard', a:'<strong>Server Components</strong> render on the server and send serialized UI to the client — no JS bundle shipped, no hydration needed. They can directly access databases, file system, secrets.<div class="highlight-box">Client Components (<code>"use client"</code>) run in the browser, have access to state, effects, and event handlers. The key insight: Server Components can import Client Components, but not vice versa.</div>This enables the "zero-bundle size component" pattern where data-fetching stays server-side.', tip:'' },
+      ]},
+      { topic:'Performance', items:[
+        { q:'What is code splitting and how do you implement it in React?', diff:'medium', a:'Code splitting divides your JS bundle into smaller chunks loaded on demand. In React, use <code>React.lazy()</code> with <code>Suspense</code> for component-level splitting.<div class="highlight-box"><code>const LazyComp = React.lazy(() => import(\'./HeavyComponent\'))</code><br>Route-level splitting (most impactful) can be done via React Router\'s lazy loading or Next.js\'s automatic page splitting.</div>Also consider dynamic imports for large libraries used conditionally.', tip:'' },
+        { q:'Explain the Critical Rendering Path and how to optimize it.', diff:'hard', a:'The CRP is the sequence: HTML parsing → DOM → CSSOM → Render Tree → Layout → Paint → Composite.<div class="highlight-box">Optimizations: (1) Eliminate render-blocking resources — defer/async scripts. (2) Minimize CSS by inlining critical CSS. (3) Preload key resources. (4) Reduce layout thrashing by batching DOM reads/writes. (5) Use <code>will-change</code> or <code>transform</code> to promote elements to GPU layers for animation.</div>', tip:'' },
+      ]},
+    ],
+    challenges: [
+      { title:'Flatten Nested Array', diff:'easy', desc:'Write a function that flattens a deeply nested array to any depth. <strong>Do not use Array.flat()</strong> — implement it recursively and iteratively.',
+        input:'[1, [2, [3, [4]], 5]]', output:'[1, 2, 3, 4, 5]',
+        code:`<span class="cm">// Recursive approach</span>
+<span class="kw">function</span> <span class="fn">flattenRecursive</span>(arr) {
+  <span class="kw">return</span> arr.<span class="fn">reduce</span>((acc, val) => {
+    <span class="kw">return</span> Array.<span class="fn">isArray</span>(val)
+      ? acc.<span class="fn">concat</span>(<span class="fn">flattenRecursive</span>(val))
+      : acc.<span class="fn">concat</span>(val);
+  }, []);
+}
+
+<span class="cm">// Iterative approach (stack-based)</span>
+<span class="kw">function</span> <span class="fn">flattenIterative</span>(arr) {
+  <span class="kw">const</span> stack = [...arr];
+  <span class="kw">const</span> result = [];
+  <span class="kw">while</span> (stack.length) {
+    <span class="kw">const</span> item = stack.<span class="fn">pop</span>();
+    Array.<span class="fn">isArray</span>(item)
+      ? stack.<span class="fn">push</span>(...item)
+      : result.<span class="fn">unshift</span>(item);
+  }
+  <span class="kw">return</span> result;
+}`,
+        time:'O(n)', space:'O(n)', lang:'JavaScript' },
+      { title:'Debounce Function', diff:'medium', desc:'Implement a <strong>debounce</strong> utility from scratch. The debounced function should only execute after the user stops calling it for a given delay. This is one of the most commonly asked frontend coding questions.',
+        input:'debounce(fn, 300) → fn called rapidly', output:'fn fires once, 300ms after last call',
+        code:`<span class="kw">function</span> <span class="fn">debounce</span>(fn, delay) {
+  <span class="kw">let</span> timeoutId;
+
+  <span class="kw">return function</span>(...args) {
+    <span class="cm">// Clear any existing timer</span>
+    <span class="fn">clearTimeout</span>(timeoutId);
+
+    <span class="cm">// Set new timer</span>
+    timeoutId = <span class="fn">setTimeout</span>(() => {
+      fn.<span class="fn">apply</span>(<span class="kw">this</span>, args);
+    }, delay);
+  };
+}
+
+<span class="cm">// Usage</span>
+<span class="kw">const</span> debouncedSearch = <span class="fn">debounce</span>((query) => {
+  console.<span class="fn">log</span>(<span class="str">'Searching:'</span>, query);
+}, <span class="num">300</span>);`,
+        time:'O(1)', space:'O(1)', lang:'JavaScript' },
+      { title:'Deep Clone an Object', diff:'hard', desc:'Implement a deep clone function that handles nested objects, arrays, dates, and circular references. <strong>JSON.parse(JSON.stringify())</strong> doesn\'t count — it fails on Dates, undefined, and circular refs.',
+        input:'{a: 1, b: {c: [1,2,3]}, d: new Date()}', output:'Identical deep copy, no shared references',
+        code:`<span class="kw">function</span> <span class="fn">deepClone</span>(obj, seen = <span class="kw">new</span> <span class="cls">WeakMap</span>()) {
+  <span class="kw">if</span> (obj === <span class="kw">null</span> || <span class="kw">typeof</span> obj !== <span class="str">'object'</span>) <span class="kw">return</span> obj;
+
+  <span class="cm">// Handle circular references</span>
+  <span class="kw">if</span> (seen.<span class="fn">has</span>(obj)) <span class="kw">return</span> seen.<span class="fn">get</span>(obj);
+
+  <span class="kw">if</span> (obj <span class="kw">instanceof</span> <span class="cls">Date</span>) <span class="kw">return new</span> <span class="cls">Date</span>(obj);
+  <span class="kw">if</span> (obj <span class="kw">instanceof</span> <span class="cls">RegExp</span>) <span class="kw">return new</span> <span class="cls">RegExp</span>(obj);
+
+  <span class="kw">const</span> clone = Array.<span class="fn">isArray</span>(obj) ? [] : {};
+  seen.<span class="fn">set</span>(obj, clone);
+
+  <span class="kw">for</span> (<span class="kw">const</span> key <span class="kw">of</span> Object.<span class="fn">keys</span>(obj)) {
+    clone[key] = <span class="fn">deepClone</span>(obj[key], seen);
+  }
+  <span class="kw">return</span> clone;
+}`,
+        time:'O(n)', space:'O(n)', lang:'JavaScript' },
+    ],
+    tips: ['Always explain your thought process before writing code — interviewers evaluate your reasoning, not just the output.','For React questions, mention trade-offs. Nothing signals seniority like "it depends — here\'s when I\'d use X vs Y."','Brush up on browser DevTools — performance tab, network tab, and Lighthouse audits are common conversation topics.','Know the difference between SSR, SSG, ISR, and CSR for Next.js interviews at product companies.','Prepare one "war story" — a real performance optimization or bug fix you\'re proud of. Keep it concise: problem → approach → result.']
+  },
+  {
+    id: 'backend', icon: '🔧', name: 'Backend Engineer', color: '#00d4aa',
+    desc: 'Deep dives into APIs, databases, system design, caching, message queues, and scalability patterns asked at high-growth companies.',
+    topics: ['REST & APIs','Databases','Caching','System Design','Node.js / Python','Security'],
+    qa: [
+      { topic:'REST & APIs', items:[
+        { q:'What are the principles of RESTful API design?', diff:'easy', a:'REST (Representational State Transfer) has 6 constraints: <strong>Client-Server</strong> separation, <strong>Stateless</strong> (each request contains all info), <strong>Cacheable</strong>, <strong>Uniform Interface</strong>, <strong>Layered System</strong>, and <strong>Code on Demand</strong> (optional).<div class="highlight-box">Practical rules: use nouns for resources (/users, not /getUsers), HTTP verbs for actions (GET/POST/PUT/DELETE), proper status codes (201 Created, 404 Not Found, 422 Unprocessable), and versioning (/api/v1/).</div>', tip:'' },
+        { q:'When would you use GraphQL over REST?', diff:'medium', a:'GraphQL solves <strong>over-fetching</strong> (getting more data than needed) and <strong>under-fetching</strong> (needing multiple round trips). It shines for:<div class="highlight-box">(1) Mobile clients — request only the fields you need, saving bandwidth. (2) Complex, interconnected data graphs. (3) Rapid frontend iteration without backend changes. (4) Multiple clients (web/mobile) needing different data shapes.</div>Downsides: harder caching (GET vs POST), N+1 query problem, more complex backend, overkill for simple CRUD.', tip:'' },
+        { q:'Explain idempotency and which HTTP methods should be idempotent.', diff:'medium', a:'An operation is <strong>idempotent</strong> if performing it multiple times produces the same result as performing it once. <div class="highlight-box">GET, PUT, DELETE, HEAD, OPTIONS — idempotent. POST — NOT idempotent (creates new resource each time). PATCH — depends on implementation.</div>This matters for retry logic: if a PUT request times out, retrying is safe. Retrying a POST could create duplicates — use idempotency keys (like Stripe does) to make POST safe to retry.', tip:'' },
+      ]},
+      { topic:'Databases', items:[
+        { q:'Explain the difference between SQL and NoSQL databases. When do you choose each?', diff:'medium', a:'<strong>SQL</strong> (PostgreSQL, MySQL): structured schema, ACID transactions, powerful joins, great for relational data. <strong>NoSQL</strong> (MongoDB, DynamoDB, Cassandra): schema flexibility, horizontal scaling, optimized for specific access patterns.<div class="highlight-box">Choose SQL when: data relationships are complex, you need transactions, reporting/analytics matter. Choose NoSQL when: schema changes frequently, you need massive horizontal scale, data is document/key-value/graph-shaped, or you need sub-millisecond latency at massive scale.</div>', tip:'' },
+        { q:'What is database indexing and how do B-tree indexes work?', diff:'hard', a:'An index is a separate data structure that speeds up data retrieval at the cost of write overhead. <strong>B-tree indexes</strong> — the most common type — store sorted keys in a balanced tree where every path from root to leaf is the same length.<div class="highlight-box">Lookups: O(log n). Works for equality, range queries, ORDER BY, and prefix matching. Does NOT help for: columns with low cardinality (like boolean), columns used with functions in WHERE, or leading % wildcards in LIKE.</div>Composite indexes follow the "leftmost prefix" rule — only useful if querying from the leftmost column.', tip:'Draw a B-tree — showing you understand the data structure impresses seniors.' },
+        { q:'What is the N+1 query problem and how do you fix it?', diff:'medium', a:'The N+1 problem: fetching N records then making 1 additional query per record = N+1 total queries.<div class="highlight-box">Example: fetching 100 users, then querying each user\'s posts = 101 queries. Solutions: (1) SQL JOIN — fetch everything in one query. (2) Eager loading (ORM: <code>include</code>/<code>with</code>). (3) DataLoader pattern — batch and deduplicate queries (used in GraphQL). (4) Denormalization for read-heavy paths.</div>', tip:'' },
+      ]},
+      { topic:'Caching', items:[
+        { q:'Explain different caching strategies: write-through, write-behind, cache-aside.', diff:'hard', a:'<strong>Cache-aside (Lazy loading)</strong>: App checks cache → miss → fetch from DB → write to cache. Simple, only caches what\'s needed. Stale data risk on DB updates.<div class="highlight-box"><strong>Write-through</strong>: Write to cache AND DB together. Always consistent, but higher write latency. <strong>Write-behind (Write-back)</strong>: Write to cache immediately, async write to DB. Lowest latency but data loss risk on crash. <strong>Read-through</strong>: Cache handles DB fetch on miss automatically (used in Redis with modules).</div>', tip:'' },
+      ]},
+    ],
+    challenges: [
+      { title:'Rate Limiter (Token Bucket)', diff:'medium', desc:'Implement a <strong>token bucket rate limiter</strong> class. It should allow a maximum number of requests per time window, replenishing tokens at a fixed rate.',
+        input:'new RateLimiter(5, 1000) → 5 req/sec', output:'true/true/true/true/true/false (6th blocked)',
+        code:`<span class="kw">class</span> <span class="cls">RateLimiter</span> {
+  <span class="fn">constructor</span>(maxTokens, refillIntervalMs) {
+    <span class="kw">this</span>.maxTokens = maxTokens;
+    <span class="kw">this</span>.tokens = maxTokens;
+    <span class="kw">this</span>.lastRefill = Date.<span class="fn">now</span>();
+    <span class="kw">this</span>.refillIntervalMs = refillIntervalMs;
+  }
+
+  <span class="fn">refill</span>() {
+    <span class="kw">const</span> now = Date.<span class="fn">now</span>();
+    <span class="kw">const</span> elapsed = now - <span class="kw">this</span>.lastRefill;
+    <span class="kw">const</span> tokensToAdd = Math.<span class="fn">floor</span>(
+      (elapsed / <span class="kw">this</span>.refillIntervalMs) * <span class="kw">this</span>.maxTokens
+    );
+    <span class="kw">if</span> (tokensToAdd > <span class="num">0</span>) {
+      <span class="kw">this</span>.tokens = Math.<span class="fn">min</span>(<span class="kw">this</span>.maxTokens, <span class="kw">this</span>.tokens + tokensToAdd);
+      <span class="kw">this</span>.lastRefill = now;
+    }
+  }
+
+  <span class="fn">allow</span>() {
+    <span class="kw">this</span>.<span class="fn">refill</span>();
+    <span class="kw">if</span> (<span class="kw">this</span>.tokens > <span class="num">0</span>) {
+      <span class="kw">this</span>.tokens--;
+      <span class="kw">return true</span>;
+    }
+    <span class="kw">return false</span>;
+  }
+}`,
+        time:'O(1)', space:'O(1)', lang:'JavaScript' },
+      { title:'LRU Cache', diff:'hard', desc:'Design and implement a <strong>Least Recently Used (LRU) Cache</strong> with O(1) get and put operations. This is a top-5 most asked backend interview question at FAANG.',
+        input:'LRUCache(2) → put(1,1), put(2,2), get(1)=1, put(3,3) evicts 2', output:'get(2) → -1 (evicted)',
+        code:`<span class="kw">class</span> <span class="cls">LRUCache</span> {
+  <span class="fn">constructor</span>(capacity) {
+    <span class="kw">this</span>.capacity = capacity;
+    <span class="cm">// Map preserves insertion order in JS</span>
+    <span class="kw">this</span>.cache = <span class="kw">new</span> <span class="cls">Map</span>();
+  }
+
+  <span class="fn">get</span>(key) {
+    <span class="kw">if</span> (!<span class="kw">this</span>.cache.<span class="fn">has</span>(key)) <span class="kw">return</span> -<span class="num">1</span>;
+    <span class="cm">// Move to end (most recently used)</span>
+    <span class="kw">const</span> val = <span class="kw">this</span>.cache.<span class="fn">get</span>(key);
+    <span class="kw">this</span>.cache.<span class="fn">delete</span>(key);
+    <span class="kw">this</span>.cache.<span class="fn">set</span>(key, val);
+    <span class="kw">return</span> val;
+  }
+
+  <span class="fn">put</span>(key, value) {
+    <span class="kw">if</span> (<span class="kw">this</span>.cache.<span class="fn">has</span>(key)) <span class="kw">this</span>.cache.<span class="fn">delete</span>(key);
+    <span class="kw">else if</span> (<span class="kw">this</span>.cache.size >= <span class="kw">this</span>.capacity) {
+      <span class="cm">// Delete least recently used (first item in Map)</span>
+      <span class="kw">this</span>.cache.<span class="fn">delete</span>(<span class="kw">this</span>.cache.keys().<span class="fn">next</span>().value);
+    }
+    <span class="kw">this</span>.cache.<span class="fn">set</span>(key, value);
+  }
+}`,
+        time:'O(1) get/put', space:'O(capacity)', lang:'JavaScript' },
+    ],
+    tips:['Always discuss trade-offs in system design. Never present only one option.','For database questions, mention EXPLAIN ANALYZE — it shows you actually tune queries.','Bring up CAP theorem naturally when discussing distributed systems.','Mention connection pooling when discussing database performance — it\'s often overlooked.','For API design, talk about backward compatibility and versioning strategy — it shows product thinking.']
+  },
+  {
+    id: 'devops', icon: '🚀', name: 'DevOps Engineer', color: '#f0c060',
+    desc: 'CI/CD pipelines, containerization, cloud infrastructure, monitoring, and SRE principles. Covers AWS, Kubernetes, Docker, Terraform and more.',
+    topics: ['Docker & Containers','Kubernetes','CI/CD','Cloud (AWS)','Infrastructure as Code','Monitoring & SRE'],
+    qa: [
+      { topic:'Docker & Containers', items:[
+        { q:'What is the difference between a Docker image and a container?', diff:'easy', a:'A <strong>Docker image</strong> is a read-only template — a snapshot of a filesystem with metadata. It\'s built from a Dockerfile using layered union filesystem. A <strong>container</strong> is a running instance of an image — it adds a writable layer on top.<div class="highlight-box">Analogy: image is a class definition, container is an instance. One image can spawn many containers. Containers share the host OS kernel, unlike VMs which run full guest OSes — hence containers are lightweight and fast.</div>', tip:'' },
+        { q:'Explain Docker multi-stage builds and their benefits.', diff:'medium', a:'Multi-stage builds use multiple <code>FROM</code> instructions in one Dockerfile. Each stage can copy artifacts from previous stages, discarding build tools.<div class="highlight-box">Example: Stage 1 (builder): install Node, npm install, run build → Stage 2 (runner): copy only the compiled output into a slim Alpine image. Result: 800MB build image becomes a 60MB production image. Benefits: smaller attack surface, smaller registry footprint, faster deployments.</div>', tip:'' },
+        { q:'How do Docker networking modes work?', diff:'hard', a:'<strong>Bridge</strong> (default): containers on the same bridge can communicate by container name. <strong>Host</strong>: container shares host\'s network stack — best performance, no isolation. <strong>None</strong>: no networking. <strong>Overlay</strong>: connects containers across multiple Docker hosts (used in Swarm/Kubernetes).<div class="highlight-box">In production Kubernetes, the CNI (Container Network Interface) handles networking. Every Pod gets its own IP. Services provide stable DNS names with load balancing via kube-proxy (iptables or IPVS rules).</div>', tip:'' },
+      ]},
+      { topic:'Kubernetes', items:[
+        { q:'Explain the difference between a Deployment, StatefulSet, and DaemonSet.', diff:'medium', a:'<strong>Deployment</strong>: manages stateless pods. Rolling updates, rollbacks, scaling. Pods are interchangeable — any pod can be killed and replaced. <strong>StatefulSet</strong>: for stateful apps (databases, Kafka). Pods get stable network identities and persistent storage. Ordered, graceful deployment and scaling. <strong>DaemonSet</strong>: ensures one pod per node. Used for node-level concerns: log collectors (Fluentd), monitoring agents (Datadog), network plugins.<div class="highlight-box">Quick rule: API server → Deployment. Postgres/Cassandra → StatefulSet. Log shipper → DaemonSet.</div>', tip:'' },
+        { q:'What happens when a Kubernetes Pod gets OOMKilled?', diff:'hard', a:'OOMKilled means the container exceeded its <code>memory limit</code> and the Linux kernel OOM killer terminated it. Kubernetes will restart it based on <code>restartPolicy</code>.<div class="highlight-box">Diagnosis steps: (1) <code>kubectl describe pod</code> — check Last State exit code 137. (2) Check container metrics for memory growth patterns. (3) Review if limits are set too low vs actual usage. Fixes: increase memory limits, fix memory leaks, add memory-based HPA autoscaling, or switch to VPA for automatic tuning.</div>', tip:'Mentioning OOM exit code 137 specifically impresses interviewers.' },
+      ]},
+      { topic:'CI/CD', items:[
+        { q:'What is the difference between Continuous Delivery and Continuous Deployment?', diff:'easy', a:'<strong>Continuous Integration (CI)</strong>: automatically build and test on every commit. <strong>Continuous Delivery (CD)</strong>: automatically prepare release artifact — but a human approves deployment to production. <strong>Continuous Deployment</strong>: every passing commit is automatically deployed to production with no human gate.<div class="highlight-box">Most mature tech companies use Continuous Delivery with automated canary/blue-green deployments, combining automation with progressive rollout strategies instead of a binary on/off gate.</div>', tip:'' },
+      ]},
+    ],
+    challenges: [
+      { title:'Write a Dockerfile for a Node.js App', diff:'easy', desc:'Write a production-ready <strong>multi-stage Dockerfile</strong> for a Node.js application. Optimize for small image size, security, and build caching.',
+        input:'Node.js Express app with package.json', output:'Optimized multi-stage Docker image',
+        code:`<span class="cm"># Stage 1: Dependencies</span>
+<span class="kw">FROM</span> node:<span class="num">20</span>-alpine <span class="kw">AS</span> deps
+<span class="kw">WORKDIR</span> /app
+<span class="cm"># Copy package files first (layer cache optimization)</span>
+<span class="kw">COPY</span> package*.json ./
+<span class="kw">RUN</span> npm ci --only=production
+
+<span class="cm"># Stage 2: Build</span>
+<span class="kw">FROM</span> node:<span class="num">20</span>-alpine <span class="kw">AS</span> build
+<span class="kw">WORKDIR</span> /app
+<span class="kw">COPY</span> package*.json ./
+<span class="kw">RUN</span> npm ci
+<span class="kw">COPY</span> . .
+<span class="kw">RUN</span> npm run build
+
+<span class="cm"># Stage 3: Production</span>
+<span class="kw">FROM</span> node:<span class="num">20</span>-alpine <span class="kw">AS</span> runner
+<span class="kw">WORKDIR</span> /app
+<span class="cm"># Run as non-root for security</span>
+<span class="kw">RUN</span> addgroup -S appgroup && adduser -S appuser -G appgroup
+<span class="kw">COPY</span> --from=deps /app/node_modules ./node_modules
+<span class="kw">COPY</span> --from=build /app/dist ./dist
+<span class="kw">USER</span> appuser
+<span class="kw">EXPOSE</span> <span class="num">3000</span>
+<span class="kw">CMD</span> [<span class="str">"node"</span>, <span class="str">"dist/server.js"</span>]`,
+        time:'N/A', space:'~80MB final image', lang:'Dockerfile' },
+    ],
+    tips:['Know the "4 golden signals": latency, traffic, errors, saturation — mention these in monitoring discussions.','For Kubernetes questions, always mention resource requests vs limits distinction.','Infrastructure as Code is expected for senior roles — know Terraform basics.','Blue-green vs canary deployments: know when to use each and the rollback strategy.','Mention DORA metrics (deployment frequency, lead time, MTTR, change failure rate) in CI/CD discussions.']
+  },
+  {
+    id: 'data', icon: '📊', name: 'Data Scientist', color: '#ff6b6b',
+    desc: 'Statistics, machine learning, SQL, feature engineering, model evaluation, and practical ML system design — from startups to research-heavy companies.',
+    topics: ['Statistics & Probability','Machine Learning','SQL & Data Wrangling','Model Evaluation','Deep Learning','ML System Design'],
+    qa:[
+      { topic:'Statistics & Probability', items:[
+        { q:'Explain p-value and what p < 0.05 actually means.', diff:'medium', a:'The p-value is the probability of observing results <strong>at least as extreme</strong> as those observed, assuming the null hypothesis is true. It is NOT the probability that the null hypothesis is false.<div class="highlight-box">p < 0.05 means: if the null hypothesis were true, we\'d see this result less than 5% of the time by chance. We reject H₀ at the 5% significance level. It does NOT mean the effect is large, important, or that H₁ is 95% likely to be true.</div>Many Data Science interviews probe whether you understand common misinterpretations.', tip:'Knowing the misinterpretations scores major points — most candidates don\'t.' },
+        { q:'What is the bias-variance trade-off?', diff:'medium', a:'<strong>Bias</strong>: error from wrong assumptions in the learning algorithm. High bias → underfitting. <strong>Variance</strong>: error from sensitivity to small fluctuations in training data. High variance → overfitting.<div class="highlight-box">Total Error = Bias² + Variance + Irreducible Noise. As model complexity increases: bias decreases, variance increases. The sweet spot minimizes total error on unseen data. Techniques: regularization (reduces variance), more data (reduces variance), simpler models (reduces variance, increases bias).</div>', tip:'' },
+      ]},
+      { topic:'Machine Learning', items:[
+        { q:'Explain gradient descent and the difference between batch, mini-batch, and stochastic.', diff:'medium', a:'Gradient descent updates model parameters by moving in the direction of the negative gradient of the loss function.<div class="highlight-box"><strong>Batch GD</strong>: uses entire dataset per update — accurate gradients, slow for large data. <strong>Stochastic GD (SGD)</strong>: one sample per update — fast, noisy, can escape local minima. <strong>Mini-batch GD</strong>: n samples per update (typically 32–256) — best of both, GPU-efficient, practical default.</div>Adaptive optimizers (Adam, RMSprop) adjust learning rate per parameter — preferred in deep learning.', tip:'' },
+        { q:'How would you handle a severely imbalanced classification dataset?', diff:'hard', a:'Imbalance means the model learns to predict the majority class. Fixes:<div class="highlight-box">(1) <strong>Resampling</strong>: oversample minority (SMOTE) or undersample majority. (2) <strong>Class weights</strong>: penalize misclassifying minority class more. (3) <strong>Threshold tuning</strong>: adjust classification threshold — don\'t use 0.5 blindly. (4) <strong>Different metrics</strong>: use F1, PR-AUC, or ROC-AUC instead of accuracy. (5) <strong>Anomaly detection</strong> framing for extreme imbalance (99:1).</div>', tip:'' },
+      ]},
+    ],
+    challenges:[
+      { title:'Implement K-Means from Scratch', diff:'hard', desc:'Implement the <strong>K-Means clustering algorithm</strong> without using sklearn. Understand centroid initialization, assignment, and convergence.',
+        input:'points=[[1,2],[1,4],[1,0],[10,2],[10,4],[10,0]], k=2', output:'Two clusters: [left points] and [right points]',
+        code:`<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">kmeans</span>(X, k, max_iters=<span class="num">100</span>, tol=<span class="num">1e-4</span>):
+    <span class="cm"># Random initialization (k-means++ is better)</span>
+    idx = np.random.<span class="fn">choice</span>(<span class="fn">len</span>(X), k, replace=<span class="kw">False</span>)
+    centroids = X[idx]
+
+    <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(max_iters):
+        <span class="cm"># Assignment step: find nearest centroid</span>
+        dists = np.linalg.<span class="fn">norm</span>(
+            X[:, np.newaxis] - centroids, axis=<span class="num">2</span>
+        )
+        labels = np.<span class="fn">argmin</span>(dists, axis=<span class="num">1</span>)
+
+        <span class="cm"># Update step: recompute centroids</span>
+        new_centroids = np.<span class="fn">array</span>([
+            X[labels == i].<span class="fn">mean</span>(axis=<span class="num">0</span>)
+            <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(k)
+        ])
+
+        <span class="cm"># Convergence check</span>
+        <span class="kw">if</span> np.linalg.<span class="fn">norm</span>(new_centroids - centroids) < tol:
+            <span class="kw">break</span>
+        centroids = new_centroids
+
+    <span class="kw">return</span> labels, centroids`,
+        time:'O(n·k·i)', space:'O(n·k)', lang:'Python' },
+    ],
+    tips:['Always ask about the business metric before choosing ML metrics — interviewers want product thinking.','Mention data leakage as a risk when discussing model evaluation — it\'s a senior-level signal.','For A/B testing questions, discuss statistical power, sample size calculation, and novelty effects.','Know the difference between L1 and L2 regularization: L1 produces sparse weights (feature selection), L2 penalizes large weights uniformly.','SQL is still expected — practice window functions (ROW_NUMBER, LAG, LEAD) and CTEs.']
+  },
+  {
+    id: 'cloud', icon: '☁️', name: 'Cloud Architect', color: '#00d4aa',
+    desc: 'AWS, Azure, GCP architecture patterns, cost optimization, high availability, disaster recovery, and cloud-native design.',
+    topics: ['AWS Core Services','High Availability','Networking & VPC','Cost Optimization','Security','Serverless'],
+    qa:[
+      { topic:'AWS Core Services', items:[
+        { q:'Explain the difference between EC2, ECS, EKS, and Lambda.', diff:'medium', a:'<strong>EC2</strong>: raw VMs. Full control, highest operational overhead, pay for idle time. <strong>ECS</strong>: managed container orchestration using Docker. AWS manages control plane. <strong>EKS</strong>: managed Kubernetes. More complex, more portable, better ecosystem. <strong>Lambda</strong>: serverless functions. Pay per invocation, auto-scale to zero, cold starts.<div class="highlight-box">Decision tree: Need full control? EC2. Running containers, AWS-native? ECS Fargate. Need K8s portability? EKS. Event-driven, short-lived? Lambda. Most new workloads at scale start with ECS Fargate.</div>', tip:'' },
+        { q:'What is the difference between S3 storage classes and when would you use each?', diff:'medium', a:'<strong>S3 Standard</strong>: frequent access, 99.99% availability. <strong>S3 Intelligent-Tiering</strong>: auto-moves objects between tiers based on access patterns — best when patterns are unpredictable. <strong>S3 Standard-IA</strong>: infrequent access, lower storage cost, retrieval fee. <strong>Glacier Instant Retrieval</strong>: archives with millisecond retrieval. <strong>Glacier Deep Archive</strong>: lowest cost, 12hr retrieval.<div class="highlight-box">S3 Lifecycle Policies automate transitions. Common pattern: Standard → Standard-IA (30 days) → Glacier (90 days) → Deep Archive (1 year) → Expire.</div>', tip:'' },
+      ]},
+      { topic:'High Availability', items:[
+        { q:'Design a highly available, fault-tolerant web application on AWS.', diff:'hard', a:'<div class="highlight-box"><strong>Core pattern</strong>: Route 53 (DNS + health checks) → CloudFront (CDN + WAF) → ALB across 2+ AZs → Auto Scaling Group of EC2/ECS tasks → RDS Multi-AZ → ElastiCache (Redis) for sessions/cache → S3 for static assets.</div>Key HA decisions: Multi-AZ deployment (survive AZ failure), ASG (survive instance failure), RDS Multi-AZ (survive DB failure), health checks at every layer, circuit breakers for downstream calls, and dead letter queues for async jobs.<br><br>For 99.99% SLA: add multi-region with Route 53 failover routing and cross-region RDS read replicas.', tip:'' },
+      ]},
+    ],
+    challenges:[
+      { title:'Design an S3 Event-Driven Pipeline', diff:'medium', desc:'Describe the architecture and write the <strong>Lambda handler</strong> for a serverless image processing pipeline: upload to S3 → resize image → store thumbnail → send notification.',
+        input:'S3 PutObject event (image.jpg uploaded)', output:'Resized thumbnail stored, SNS notification sent',
+        code:`<span class="kw">import</span> boto3, io
+<span class="kw">from</span> PIL <span class="kw">import</span> Image
+
+s3 = boto3.<span class="fn">client</span>(<span class="str">'s3'</span>)
+sns = boto3.<span class="fn">client</span>(<span class="str">'sns'</span>)
+
+<span class="kw">def</span> <span class="fn">handler</span>(event, context):
+    <span class="cm"># Extract bucket and key from S3 event</span>
+    record = event[<span class="str">'Records'</span>][<span class="num">0</span>]
+    bucket = record[<span class="str">'s3'</span>][<span class="str">'bucket'</span>][<span class="str">'name'</span>]
+    key = record[<span class="str">'s3'</span>][<span class="str">'object'</span>][<span class="str">'key'</span>]
+
+    <span class="cm"># Download original</span>
+    response = s3.<span class="fn">get_object</span>(Bucket=bucket, Key=key)
+    img = Image.<span class="fn">open</span>(io.<span class="cls">BytesIO</span>(response[<span class="str">'Body'</span>].<span class="fn">read</span>()))
+
+    <span class="cm"># Resize to thumbnail</span>
+    img.<span class="fn">thumbnail</span>((<span class="num">200</span>, <span class="num">200</span>), Image.LANCZOS)
+
+    <span class="cm"># Upload thumbnail</span>
+    buffer = io.<span class="cls">BytesIO</span>()
+    img.<span class="fn">save</span>(buffer, format=<span class="str">'JPEG'</span>, quality=<span class="num">85</span>)
+    thumb_key = <span class="str">f'thumbnails/{key}'</span>
+    s3.<span class="fn">put_object</span>(
+        Bucket=bucket, Key=thumb_key,
+        Body=buffer.<span class="fn">getvalue</span>(), ContentType=<span class="str">'image/jpeg'</span>
+    )
+
+    <span class="cm"># Send SNS notification</span>
+    sns.<span class="fn">publish</span>(
+        TopicArn=<span class="str">'arn:aws:sns:...:ImageProcessed'</span>,
+        Message=<span class="str">f'Thumbnail created: {thumb_key}'</span>
+    )
+    <span class="kw">return</span> {<span class="str">'statusCode'</span>: <span class="num">200</span>}`,
+        time:'O(1) per invocation', space:'O(image size)', lang:'Python' },
+    ],
+    tips:['Always discuss costs — cloud architects are expected to optimize spend, not just architect for performance.','Know the Well-Architected Framework 6 pillars: Operational Excellence, Security, Reliability, Performance, Cost Optimization, Sustainability.','For any system design, mention monitoring and observability strategy — CloudWatch, X-Ray, custom metrics.','Know IAM best practices: least privilege, roles over users, resource-based vs identity-based policies.','RDS vs Aurora vs DynamoDB — know when each wins and the 10x cost-to-performance profile of Aurora Serverless.']
+  },
+  {
+    id: 'ml', icon: '🤖', name: 'ML Engineer', color: '#a78bff',
+    desc: 'Production ML systems, MLOps, model serving, feature stores, training pipelines, and the intersection of software engineering and machine learning.',
+    topics: ['ML Fundamentals','MLOps & Pipelines','Model Serving','Feature Engineering','Deep Learning','LLMs & GenAI'],
+    qa:[
+      { topic:'MLOps & Pipelines', items:[
+        { q:'What is feature store and why is it important in ML systems?', diff:'medium', a:'A feature store is a centralized repository for <strong>storing, sharing, and serving ML features</strong> across teams and models. It separates feature computation from model training.<div class="highlight-box">Benefits: (1) No duplicate feature code — compute once, use everywhere. (2) Point-in-time correct feature retrieval — prevents training/serving skew. (3) Online (low-latency) and offline (batch training) serving from same source. (4) Feature versioning and lineage tracking.</div>Tools: Feast (open source), Tecton, Vertex AI Feature Store, AWS SageMaker Feature Store.', tip:'' },
+        { q:'How do you detect and handle training-serving skew?', diff:'hard', a:'Training-serving skew: model performs well offline but poorly in production because training and serving data distributions differ.<div class="highlight-box">Detection: (1) Log model inputs in production. (2) Compare feature distributions using statistical tests (KS test, PSI). (3) Monitor prediction distributions, not just accuracy. (4) Shadow mode testing before full rollout.</div>Causes: different preprocessing code paths, temporal data leak, data pipeline bugs, feature not available at serving time. Prevention: use the same feature pipeline for training and serving (feature store solves this).', tip:'' },
+      ]},
+      { topic:'Model Serving', items:[
+        { q:'Explain different model deployment strategies: A/B test, shadow mode, canary, champion-challenger.', diff:'hard', a:'<strong>Shadow mode</strong>: new model runs in parallel, predictions logged but not served — zero user risk, great for validation. <strong>Canary</strong>: route small % traffic (1-5%) to new model, gradually increase. <strong>A/B test</strong>: randomized controlled experiment, statistical significance required. <strong>Champion-Challenger</strong>: current best (champion) vs one or more new models (challengers), continuous competition.<div class="highlight-box">Recommended flow: Shadow → Canary → A/B Test → Full rollout. Use shadow mode first to catch bugs, canary for staged rollout, A/B for statistically rigorous comparison.</div>', tip:'' },
+      ]},
+      { topic:'LLMs & GenAI', items:[
+        { q:'What is RAG (Retrieval Augmented Generation) and when would you use it over fine-tuning?', diff:'medium', a:'RAG retrieves relevant documents from a knowledge base at inference time and includes them in the prompt context before calling the LLM.<div class="highlight-box"><strong>Use RAG when</strong>: knowledge changes frequently (can update vector DB without retraining), you need source citations, knowledge is proprietary, or budget is limited. <strong>Use fine-tuning when</strong>: you need a specific style/format/persona baked in, the task is highly specialized, or you need lower latency/cost at high volume.</div>In practice: RAG first, then fine-tune on top of RAG if quality still insufficient.', tip:'' },
+      ]},
+    ],
+    challenges:[
+      { title:'Implement Cosine Similarity for Embeddings', diff:'medium', desc:'Implement <strong>cosine similarity</strong> from scratch — the core similarity measure used in embedding search, recommendation systems, and RAG retrieval.',
+        input:'v1=[1,0,1], v2=[0,1,1]', output:'similarity ≈ 0.5',
+        code:`<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">cosine_similarity</span>(v1, v2):
+    <span class="cm">"""
+    Cosine similarity = dot(v1,v2) / (||v1|| * ||v2||)
+    Range: [-1, 1] where 1 = identical direction
+    """</span>
+    v1, v2 = np.<span class="fn">array</span>(v1), np.<span class="fn">array</span>(v2)
+
+    dot_product = np.<span class="fn">dot</span>(v1, v2)
+    norm_v1 = np.linalg.<span class="fn">norm</span>(v1)
+    norm_v2 = np.linalg.<span class="fn">norm</span>(v2)
+
+    <span class="kw">if</span> norm_v1 == <span class="num">0</span> <span class="kw">or</span> norm_v2 == <span class="num">0</span>:
+        <span class="kw">return</span> <span class="num">0.0</span>
+
+    <span class="kw">return</span> dot_product / (norm_v1 * norm_v2)
+
+<span class="cm"># Batch version for vector DB lookups</span>
+<span class="kw">def</span> <span class="fn">cosine_similarity_matrix</span>(query, corpus):
+    <span class="cm"># Normalize all vectors</span>
+    query_norm = query / np.linalg.<span class="fn">norm</span>(query)
+    corpus_norm = corpus / np.linalg.<span class="fn">norm</span>(
+        corpus, axis=<span class="num">1</span>, keepdims=<span class="kw">True</span>
+    )
+    <span class="kw">return</span> corpus_norm @ query_norm`,
+        time:'O(n) single, O(n·d) batch', space:'O(1)', lang:'Python' },
+    ],
+    tips:['Mention monitoring model drift separately from data drift — interviewers at ML-heavy companies appreciate the distinction.','For LLM questions, know prompt engineering patterns: few-shot, chain-of-thought, ReAct.','MLflow and Weights & Biases are standard — know what experiment tracking solves.','Discuss quantization and model compression for production deployment efficiency.','The most asked ML system design: recommendation system. Practice the two-tower model architecture.']
+  },
+  {
+    id: 'security', icon: '🛡️', name: 'Cybersecurity Analyst', color: '#ff6b6b',
+    desc: 'Threat modeling, incident response, penetration testing concepts, OWASP Top 10, network security, and security architecture patterns.',
+    topics: ['OWASP Top 10','Network Security','Cryptography','Incident Response','Threat Modeling','Cloud Security'],
+    qa:[
+      { topic:'OWASP Top 10', items:[
+        { q:'Explain SQL Injection and how to prevent it.', diff:'easy', a:'SQL injection occurs when user input is concatenated directly into SQL queries, allowing attackers to manipulate the query logic.<div class="highlight-box">Attack: <code>SELECT * FROM users WHERE name=\'admin\'--\'</code> bypasses password check. <strong>Prevention</strong>: (1) Parameterized queries / prepared statements — always. (2) ORM with parameterization. (3) Input validation and allowlisting. (4) Least privilege DB accounts. (5) WAF as defense-in-depth (not primary defense).</div>', tip:'' },
+        { q:'What is Cross-Site Request Forgery (CSRF) and how does SameSite cookie attribute help?', diff:'medium', a:'CSRF tricks authenticated users into unknowingly submitting requests to a site they\'re logged into. The attacker\'s site loads an image/form that fires a request with the victim\'s cookies.<div class="highlight-box">Prevention: (1) <strong>CSRF tokens</strong> — unique per-session token embedded in forms, verified server-side. (2) <strong>SameSite=Strict</strong>: cookie only sent on same-site requests. <strong>SameSite=Lax</strong>: sent on top-level navigations only. <strong>SameSite=None; Secure</strong>: sent cross-site (needs HTTPS). (3) Verify <code>Origin</code>/<code>Referer</code> headers.</div>', tip:'' },
+        { q:'Explain the difference between authentication and authorization.', diff:'easy', a:'<strong>Authentication (AuthN)</strong>: verifying WHO you are. Proving identity via passwords, MFA, biometrics, certificates. <strong>Authorization (AuthZ)</strong>: verifying WHAT you\'re allowed to do. Checking permissions after identity is established.<div class="highlight-box">Common confusion: OAuth 2.0 is an <em>authorization</em> framework, not authentication. OpenID Connect (OIDC) adds the authentication layer on top of OAuth 2.0. JWT tokens carry claims for both.</div>', tip:'' },
+      ]},
+      { topic:'Cryptography', items:[
+        { q:'Explain hashing vs encryption vs encoding.', diff:'medium', a:'<strong>Encoding</strong>: transforms data format for compatibility (Base64, URL encoding). NOT for security — easily reversed without a key. <strong>Hashing</strong>: one-way transformation — you cannot reverse it. Used for storing passwords (bcrypt, Argon2), data integrity (SHA-256). <strong>Encryption</strong>: two-way transformation requiring a key. Symmetric (AES-256): same key encrypts/decrypts. Asymmetric (RSA): public key encrypts, private key decrypts.<div class="highlight-box">For passwords: ALWAYS hash (bcrypt/Argon2 with salt), NEVER encrypt (encryption is reversible). For data in transit: encrypt (TLS). For data integrity: hash (HMAC).</div>', tip:'' },
+      ]},
+    ],
+    challenges:[
+      { title:'Implement Password Hashing & Verification', diff:'medium', desc:'Implement secure <strong>password hashing</strong> using bcrypt. Never store plaintext or MD5/SHA1 passwords — understand why and implement the right way.',
+        input:'password="secret123"', output:'hashed string, verify returns true/false',
+        code:`<span class="kw">const</span> bcrypt = <span class="fn">require</span>(<span class="str">'bcrypt'</span>);
+
+<span class="kw">const</span> SALT_ROUNDS = <span class="num">12</span>; <span class="cm">// 2^12 iterations</span>
+
+<span class="cm">// Hashing (during registration)</span>
+<span class="kw">async function</span> <span class="fn">hashPassword</span>(plaintext) {
+  <span class="cm">// bcrypt auto-generates and embeds the salt</span>
+  <span class="kw">const</span> hash = <span class="kw">await</span> bcrypt.<span class="fn">hash</span>(plaintext, SALT_ROUNDS);
+  <span class="kw">return</span> hash;
+  <span class="cm">// "$2b$12$..." — includes version, cost, salt, hash</span>
+}
+
+<span class="cm">// Verification (during login)</span>
+<span class="kw">async function</span> <span class="fn">verifyPassword</span>(plaintext, storedHash) {
+  <span class="cm">// Timing-safe comparison (prevents timing attacks)</span>
+  <span class="kw">const</span> match = <span class="kw">await</span> bcrypt.<span class="fn">compare</span>(plaintext, storedHash);
+  <span class="kw">return</span> match;
+}
+
+<span class="cm">// WRONG: never do this</span>
+<span class="cm">// const hash = crypto.createHash('md5').update(pwd).digest('hex')</span>
+<span class="cm">// Reason: MD5/SHA1 are fast — brute-forceable in seconds</span>`,
+        time:'O(2^cost)', space:'O(1)', lang:'JavaScript' },
+    ],
+    tips:['In any security discussion, mention "defense in depth" — no single control is sufficient.','Know the difference between vulnerability, threat, risk, and exploit — interviewers test this.','For cloud security: shared responsibility model, IAM least privilege, and encryption at rest vs in transit.','Mention threat modeling frameworks: STRIDE (Spoofing, Tampering, Repudiation, Info disclosure, DoS, Elevation).','Incident response lifecycle: Preparation → Detection → Containment → Eradication → Recovery → Lessons learned.']
+  },
+  {
+    id: 'mobile', icon: '📱', name: 'Mobile Developer', color: '#4ade80',
+    desc: 'iOS (Swift/SwiftUI), Android (Kotlin/Jetpack Compose), React Native, performance optimization, and mobile-specific architecture patterns.',
+    topics: ['React Native','iOS (Swift)','Android (Kotlin)','Performance','Architecture','App Store / Distribution'],
+    qa:[
+      { topic:'React Native', items:[
+        { q:'How does the React Native bridge work, and what is the new architecture (JSI)?', diff:'hard', a:'Old architecture: JS thread and Native thread communicate via an asynchronous <strong>bridge</strong> — serializing data to JSON, passing over the bridge, deserializing. This causes bottlenecks for high-frequency operations (animations, gestures).<div class="highlight-box">New Architecture (JSI — JavaScript Interface): JS holds a direct C++ reference to native objects, enabling <strong>synchronous, direct calls</strong> without serialization. Enables: Synchronous native calls, shared memory, concurrent features. Fabric (new renderer) and TurboModules build on JSI.</div>', tip:'' },
+        { q:'Explain the difference between FlatList and ScrollView in React Native.', diff:'easy', a:'<strong>ScrollView</strong>: renders all children at once. Good for small, known-size content (< 20 items). <strong>FlatList</strong>: renders only visible items (virtualization). Items off-screen are unmounted. Uses a windowing approach.<div class="highlight-box">Always use FlatList for dynamic lists, user-generated content, or any list that could grow. ScrollView for short, static content. SectionList for grouped data with section headers. FlashList (Shopify) is a faster FlatList alternative using recycled item components.</div>', tip:'' },
+      ]},
+      { topic:'Performance', items:[
+        { q:'How do you optimize React Native app performance?', diff:'medium', a:'<div class="highlight-box">Key optimizations: (1) Move animations to native thread with <code>useNativeDriver: true</code> in Animated API, or use Reanimated 2. (2) Memoize components with React.memo, use useCallback/useMemo. (3) Avoid inline functions and styles in render. (4) FlatList optimizations: <code>keyExtractor</code>, <code>getItemLayout</code> for fixed-height items, <code>windowSize</code>, <code>removeClippedSubviews</code>. (5) Hermes engine (enabled by default). (6) Flipper for performance profiling.</div>', tip:'' },
+      ]},
+    ],
+    challenges:[
+      { title:'Custom useDebounce Hook', diff:'easy', desc:'Build a reusable <strong>useDebounce</strong> hook for React Native — useful for search inputs to avoid firing API calls on every keystroke.',
+        input:'useDebounce(searchText, 500)', output:'debounced value updates 500ms after user stops typing',
+        code:`<span class="kw">import</span> { useState, useEffect } <span class="kw">from</span> <span class="str">'react'</span>;
+
+<span class="kw">function</span> <span class="fn">useDebounce</span>(value, delay) {
+  <span class="kw">const</span> [debouncedValue, setDebouncedValue] = <span class="fn">useState</span>(value);
+
+  <span class="fn">useEffect</span>(() => {
+    <span class="kw">const</span> timer = <span class="fn">setTimeout</span>(() => {
+      <span class="fn">setDebouncedValue</span>(value);
+    }, delay);
+
+    <span class="cm">// Cleanup: cancel timer if value changes</span>
+    <span class="kw">return</span> () => <span class="fn">clearTimeout</span>(timer);
+  }, [value, delay]);
+
+  <span class="kw">return</span> debouncedValue;
+}
+
+<span class="cm">// Usage in component</span>
+<span class="kw">function</span> <span class="fn">SearchScreen</span>() {
+  <span class="kw">const</span> [query, setQuery] = <span class="fn">useState</span>(<span class="str">''</span>);
+  <span class="kw">const</span> debouncedQuery = <span class="fn">useDebounce</span>(query, <span class="num">500</span>);
+
+  <span class="fn">useEffect</span>(() => {
+    <span class="kw">if</span> (debouncedQuery) <span class="fn">searchAPI</span>(debouncedQuery);
+  }, [debouncedQuery]);
+}`,
+        time:'O(1)', space:'O(1)', lang:'React Native / TypeScript' },
+    ],
+    tips:['Know both Expo and bare React Native workflows — when to eject and why.','For iOS-specific: Swift concurrency (async/await, actors), memory management with ARC.','For Android-specific: Lifecycle awareness, ViewModel, Kotlin coroutines.','App startup time optimization is a favorite: lazy loading, splash screen best practices, bundle size.','State management: know Redux Toolkit, Zustand, and when context is enough — don\'t over-engineer.']
+  },
+  {
+    id: 'qa', icon: '🧪', name: 'QA Engineer', color: '#00d4aa',
+    desc: 'Test automation, test strategy, API testing, performance testing, CI integration, and quality engineering at scale.',
+    topics: ['Testing Fundamentals','Test Automation','API Testing','Performance Testing','Test Strategy','CI/CD Integration'],
+    qa:[
+      { topic:'Testing Fundamentals', items:[
+        { q:'Explain the Testing Pyramid and why it matters.', diff:'easy', a:'The Testing Pyramid (Mike Cohn) has three layers: <strong>Unit tests</strong> (bottom — many, fast, cheap), <strong>Integration tests</strong> (middle — moderate), <strong>E2E tests</strong> (top — few, slow, expensive).<div class="highlight-box">The key insight: tests near the top are slower and more fragile. An inverted pyramid (too many E2E tests) leads to slow, flaky CI pipelines. Aim for 70% unit / 20% integration / 10% E2E. The "Testing Trophy" (Kent C. Dodds) emphasizes integration tests more heavily for frontend.</div>', tip:'' },
+        { q:'What is the difference between flaky tests and brittle tests?', diff:'medium', a:'<strong>Flaky tests</strong>: pass and fail non-deterministically on the same code. Causes: race conditions, time-dependent logic, external service dependencies, ordering dependencies, async timing issues.<div class="highlight-box"><strong>Brittle tests</strong>: fail when unrelated code changes — over-specifying implementation details. Example: testing that a function calls <code>console.log</code> with exact formatting — any refactor breaks it even if behavior is correct.</div>Fix flaky: deterministic waits, proper mocking, isolated state. Fix brittle: test behavior not implementation, use integration-level assertions.', tip:'' },
+      ]},
+      { topic:'Test Automation', items:[
+        { q:'Compare Cypress, Playwright, and Selenium for E2E testing.', diff:'medium', a:'<strong>Selenium</strong>: oldest, widest browser support, language-agnostic (Java/Python/JS), but slow, complex setup, flaky without proper waits. <strong>Cypress</strong>: modern, developer-friendly, runs inside browser (great debugging), automatic waiting, but only JavaScript, limited multi-tab support. <strong>Playwright</strong>: Microsoft, supports all browsers + Firefox, multiple languages, auto-wait, parallel test execution, great for complex scenarios, cross-browser best choice.<div class="highlight-box">Recommendation: Playwright for new projects (most powerful), Cypress for JS teams that value DX, Selenium when you need Java/Python or legacy browser support.</div>', tip:'' },
+      ]},
+    ],
+    challenges:[
+      { title:'Write API Test Suite with fetch', diff:'medium', desc:'Write a <strong>clean API test suite</strong> for a user registration endpoint, covering happy path, validation errors, and edge cases.',
+        input:'POST /api/users — {email, password, name}', output:'201 Created | 400 Validation Error | 409 Conflict',
+        code:`<span class="cm">// Using Jest + native fetch</span>
+<span class="kw">const</span> BASE_URL = <span class="str">'http://localhost:3000/api'</span>;
+
+describe(<span class="str">'POST /api/users'</span>, () => {
+  describe(<span class="str">'Happy path'</span>, () => {
+    <span class="fn">it</span>(<span class="str">'creates user with valid data'</span>, <span class="kw">async</span> () => {
+      <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">\`\${BASE_URL}/users\`</span>, {
+        method: <span class="str">'POST'</span>,
+        headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },
+        body: JSON.<span class="fn">stringify</span>({
+          name: <span class="str">'Test User'</span>,
+          email: <span class="str">'test@example.com'</span>,
+          password: <span class="str">'Secure123!'</span>
+        })
+      });
+      expect(res.status).<span class="fn">toBe</span>(<span class="num">201</span>);
+      <span class="kw">const</span> body = <span class="kw">await</span> res.<span class="fn">json</span>();
+      expect(body).toMatchObject({ email: <span class="str">'test@example.com'</span> });
+      expect(body.password).<span class="fn">toBeUndefined</span>(); <span class="cm">// Never expose password</span>
+    });
+  });
+
+  describe(<span class="str">'Validation'</span>, () => {
+    <span class="fn">it</span>(<span class="str">'returns 400 for invalid email'</span>, <span class="kw">async</span> () => {
+      <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">\`\${BASE_URL}/users\`</span>, {
+        method: <span class="str">'POST'</span>, headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },
+        body: JSON.<span class="fn">stringify</span>({ email: <span class="str">'not-an-email'</span>, password: <span class="str">'pass'</span> })
+      });
+      expect(res.status).<span class="fn">toBe</span>(<span class="num">400</span>);
+    });
+
+    <span class="fn">it</span>(<span class="str">'returns 409 for duplicate email'</span>, <span class="kw">async</span> () => {
+      <span class="cm">// assumes user already exists</span>
+      <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">\`\${BASE_URL}/users\`</span>, {
+        method: <span class="str">'POST'</span>, headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },
+        body: JSON.<span class="fn">stringify</span>({ email: <span class="str">'existing@example.com'</span>, password: <span class="str">'pass'</span> })
+      });
+      expect(res.status).<span class="fn">toBe</span>(<span class="num">409</span>);
+    });
+  });
+});`,
+        time:'O(1) per test', space:'O(1)', lang:'JavaScript / Jest' },
+    ],
+    tips:['Test coverage % is a vanity metric — quality of tests matters more. Say this in interviews.','Know the difference between mocks, stubs, spies, and fakes — interviewers test vocabulary.','Performance testing: know the difference between load testing (expected), stress testing (breaking point), and soak testing (sustained load).','Shift-left testing: involve QA in requirements, not just after development.','API contract testing (Pact) is a growing area — mention it for microservices test strategy questions.']
+  },
+  {
+    id: 'dba', icon: '🗄️', name: 'Database Administrator', color: '#f0c060',
+    desc: 'Database design, query optimization, replication, backup strategies, PostgreSQL/MySQL internals, and database reliability.',
+    topics: ['Query Optimization','Schema Design','Replication & HA','Backup & Recovery','PostgreSQL Internals','Transactions & ACID'],
+    qa:[
+      { topic:'Transactions & ACID', items:[
+        { q:'Explain ACID properties with real examples.', diff:'medium', a:'<strong>Atomicity</strong>: all operations succeed or all fail. Example: bank transfer — debit AND credit must both succeed, or neither happens. <strong>Consistency</strong>: transaction brings DB from one valid state to another. Constraints, triggers, cascades enforced. <strong>Isolation</strong>: concurrent transactions appear sequential. Other transactions don\'t see intermediate states. <strong>Durability</strong>: committed data survives crashes (WAL/redo log).<div class="highlight-box">Remember: Not all databases give you ACID by default. MongoDB had no multi-document transactions until v4.0. Many NoSQL systems trade ACID for availability/performance.</div>', tip:'' },
+        { q:'Explain isolation levels and the anomalies they prevent.', diff:'hard', a:'Isolation levels (weakest → strongest): <strong>Read Uncommitted</strong> → allows dirty reads. <strong>Read Committed</strong> (PostgreSQL default) → prevents dirty reads, allows non-repeatable reads. <strong>Repeatable Read</strong> → prevents non-repeatable reads, allows phantom reads. <strong>Serializable</strong> → prevents all anomalies, highest overhead.<div class="highlight-box">Anomalies: <strong>Dirty read</strong>: read uncommitted changes. <strong>Non-repeatable read</strong>: re-reading a row gives different result. <strong>Phantom read</strong>: re-executing a range query gives different rows. PostgreSQL uses MVCC — snapshot isolation provides repeatable read semantics with high concurrency.</div>', tip:'' },
+      ]},
+      { topic:'Query Optimization', items:[
+        { q:'How do you diagnose and fix a slow PostgreSQL query?', diff:'hard', a:'Step 1: <code>EXPLAIN ANALYZE</code> the query — look for Seq Scans on large tables, high cost nodes, row estimate errors.<div class="highlight-box">Step 2: Identify the bottleneck: Missing index (→ CREATE INDEX), bad join order (→ analyze statistics: ANALYZE table), N+1 (→ JOIN or subquery), function in WHERE clause on indexed column (→ functional index or rewrite). Step 3: Check <code>pg_stat_statements</code> for query patterns. Step 4: Consider partial indexes, composite indexes (column order matters), or table partitioning for very large tables.</div>', tip:'Mentioning pg_stat_statements shows real-world DBA experience.' },
+      ]},
+    ],
+    challenges:[
+      { title:'Write a Window Function Query', diff:'medium', desc:'Write a SQL query using <strong>window functions</strong> to find the top 3 highest-paid employees in each department — one of the most common advanced SQL interview questions.',
+        input:'employees(id, name, dept, salary)', output:'Top 3 per dept with rank',
+        code:`<span class="cm">-- Rank employees within each department</span>
+<span class="kw">WITH</span> RankedEmployees <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    id,
+    name,
+    dept,
+    salary,
+    <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (
+      <span class="kw">PARTITION BY</span> dept
+      <span class="kw">ORDER BY</span> salary <span class="kw">DESC</span>
+    ) <span class="kw">AS</span> dept_rank
+  <span class="kw">FROM</span> employees
+)
+<span class="kw">SELECT</span> id, name, dept, salary, dept_rank
+<span class="kw">FROM</span> RankedEmployees
+<span class="kw">WHERE</span> dept_rank <= <span class="num">3</span>
+<span class="kw">ORDER BY</span> dept, dept_rank;
+
+<span class="cm">-- DENSE_RANK vs RANK vs ROW_NUMBER:
+-- RANK: gaps after ties (1,2,2,4)
+-- DENSE_RANK: no gaps (1,2,2,3)  ← usually correct
+-- ROW_NUMBER: always unique (1,2,3,4)</span>`,
+        time:'O(n log n)', space:'O(n)', lang:'SQL (PostgreSQL)' },
+    ],
+    tips:['Always run EXPLAIN ANALYZE, not just EXPLAIN — the latter doesn\'t actually execute the query.','Know the difference between VACUUM and ANALYZE in PostgreSQL — both often needed together.','Replication lag is a critical metric — mention monitoring it for read replica setups.','For schema design: normalization vs denormalization trade-offs — normalize for write-heavy, denormalize for read-heavy.','Point-in-time recovery (PITR) is expected knowledge for DBA roles — know WAL-based backup strategies.']
+  },
+  {
+    id: 'sysdesign', icon: '🔗', name: 'System Designer', color: '#6e6bff',
+    desc: 'Large-scale distributed systems, consistency models, scalability patterns, CAP theorem, and the system design interview framework.',
+    topics: ['Scalability Patterns','CAP Theorem','Distributed Systems','Load Balancing','Message Queues','Real-world Designs'],
+    qa:[
+      { topic:'Scalability Patterns', items:[
+        { q:'Explain horizontal vs vertical scaling and when to use each.', diff:'easy', a:'<strong>Vertical scaling (Scale Up)</strong>: increase resources of a single machine (more RAM, CPU). Simple, no code changes, but has a physical limit and creates a single point of failure. <strong>Horizontal scaling (Scale Out)</strong>: add more machines. Theoretically unlimited, fault-tolerant, but requires stateless apps, load balancers, distributed state management.<div class="highlight-box">Practical approach: vertical scale first (easier, faster), then horizontal when you hit limits or SLA requires zero-downtime. Stateless services are trivially horizontal. Databases are hard to horizontalize — this is why caching and read replicas come first.</div>', tip:'' },
+        { q:'How would you design a URL shortener like bit.ly?', diff:'hard', a:'<strong>Requirements</strong>: shorten URLs, redirect, analytics. 100M URLs, 1B reads/day (read-heavy 10:1).<div class="highlight-box"><strong>Core design</strong>: Hash function (base62 encoding of auto-increment ID or MD5 first 7 chars). Storage: NoSQL (Cassandra/DynamoDB) — simple key-value (shortCode → longURL), highly scalable. API: POST /shorten → 201 + shortCode. GET /{code} → 301 redirect. Cache hot URLs in Redis (20% URLs = 80% traffic). CDN for global low-latency redirects.</div>Analytics: async via Kafka stream — don\'t block the redirect path.', tip:'' },
+      ]},
+      { topic:'CAP Theorem', items:[
+        { q:'Explain CAP theorem and give examples of CP vs AP systems.', diff:'hard', a:'In a distributed system experiencing a network partition (P), you must choose between <strong>Consistency</strong> (every read returns the most recent write) and <strong>Availability</strong> (every request gets a response, possibly stale).<div class="highlight-box"><strong>CP systems</strong>: HBase, Zookeeper, MongoDB (with majority write concern) — return error if can\'t guarantee consistency. <strong>AP systems</strong>: Cassandra, DynamoDB, CouchDB — return possibly stale data during partition. Note: In practice, partitions are rare — PACELC extends CAP to also consider Latency vs Consistency during normal operation.</div>', tip:'Mentioning PACELC immediately signals senior-level depth.' },
+      ]},
+    ],
+    challenges:[
+      { title:'Design a Consistent Hash Ring', diff:'hard', desc:'Implement a <strong>consistent hash ring</strong> — the core data structure used by Cassandra, DynamoDB, and CDNs to distribute keys across nodes with minimal remapping when nodes join/leave.',
+        input:'nodes=[A,B,C], key="user_123"', output:'Assigned node; when D added, only ~25% keys remap',
+        code:`<span class="kw">class</span> <span class="cls">ConsistentHashRing</span> {
+  <span class="fn">constructor</span>(virtualNodes = <span class="num">100</span>) {
+    <span class="kw">this</span>.ring = <span class="kw">new</span> <span class="cls">Map</span>();  <span class="cm">// position → node</span>
+    <span class="kw">this</span>.sortedPositions = [];
+    <span class="kw">this</span>.virtualNodes = virtualNodes;
+  }
+
+  <span class="fn">hash</span>(key) {
+    <span class="cm">// Simple hash (use crypto.createHash in production)</span>
+    <span class="kw">let</span> h = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">const</span> c <span class="kw">of</span> key) h = (h * <span class="num">31</span> + c.charCodeAt(<span class="num">0</span>)) >>> <span class="num">0</span>;
+    <span class="kw">return</span> h % <span class="num">360</span>; <span class="cm">// ring of 360 positions</span>
+  }
+
+  <span class="fn">addNode</span>(node) {
+    <span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i < <span class="kw">this</span>.virtualNodes; i++) {
+      <span class="kw">const</span> pos = <span class="kw">this</span>.<span class="fn">hash</span>(<span class="str">\`\${node}#\${i}\`</span>);
+      <span class="kw">this</span>.ring.<span class="fn">set</span>(pos, node);
+      <span class="kw">this</span>.sortedPositions.<span class="fn">push</span>(pos);
+    }
+    <span class="kw">this</span>.sortedPositions.<span class="fn">sort</span>((a, b) => a - b);
+  }
+
+  <span class="fn">getNode</span>(key) {
+    <span class="kw">const</span> pos = <span class="kw">this</span>.<span class="fn">hash</span>(key);
+    <span class="cm">// Find first node clockwise from pos</span>
+    <span class="kw">const</span> idx = <span class="kw">this</span>.sortedPositions.<span class="fn">findIndex</span>(p => p >= pos);
+    <span class="kw">const</span> ringPos = idx === -<span class="num">1</span>
+      ? <span class="kw">this</span>.sortedPositions[<span class="num">0</span>]
+      : <span class="kw">this</span>.sortedPositions[idx];
+    <span class="kw">return</span> <span class="kw">this</span>.ring.<span class="fn">get</span>(ringPos);
+  }
+}`,
+        time:'O(log n) lookup', space:'O(n·v) virtual nodes', lang:'JavaScript' },
+    ],
+    tips:['Use the STAR framework for system design: Scope → Trade-offs → Architecture → Refinement.','Always clarify requirements before diving in: scale, read/write ratio, latency SLA, consistency needs.','Draw the diagram first, explain components second — visual communication is crucial.','Mention failure modes and recovery — availability is always a follow-up question.','Don\'t forget: monitoring, alerting, and operational concerns. Interviewers want engineers who think about ops.']
+  },
+  {
+    id: 'fullstack', icon: '🌐', name: 'Full Stack Developer', color: '#ff6b6b',
+    desc: 'End-to-end web development — frontend, backend, databases, deployment, and the architecture patterns that tie it all together.',
+    topics: ['Web Fundamentals','Authentication','API Design','Frontend + Backend','Database Integration','Deployment'],
+    qa:[
+      { topic:'Authentication', items:[
+        { q:'Explain JWT authentication — structure, how it works, and security considerations.', diff:'medium', a:'JWT (JSON Web Token) has 3 base64url-encoded parts: <strong>Header</strong> (algorithm, type), <strong>Payload</strong> (claims: userId, exp, iat), <strong>Signature</strong> (HMAC or RSA signed).<div class="highlight-box">Flow: User logs in → server creates JWT signed with secret → client stores in memory/httpOnly cookie → client sends in Authorization header → server verifies signature without DB lookup (stateless). <strong>Security concerns</strong>: (1) Store in httpOnly cookie, NOT localStorage (XSS). (2) Short expiry (15min) + refresh token pattern. (3) Include jti claim for token revocation. (4) Use RS256 for distributed systems.</div>', tip:'' },
+        { q:'What is OAuth 2.0 and how does the authorization code flow work?', diff:'hard', a:'OAuth 2.0 is an <strong>authorization framework</strong> for delegated access. Allows third-party apps to access user resources without exposing credentials.<div class="highlight-box">Authorization Code Flow: (1) App redirects user to auth server with client_id, redirect_uri, scope, state. (2) User authenticates and grants permission. (3) Auth server redirects with authorization code. (4) App exchanges code + client_secret for access + refresh tokens (server-to-server). (5) App uses access token for API calls.</div>The code exchange happens server-side — never exposing tokens in browser URL. PKCE extends this for public clients (SPAs, mobile).', tip:'' },
+      ]},
+      { topic:'Web Fundamentals', items:[
+        { q:'Explain what happens when you type a URL and press Enter.', diff:'medium', a:'This covers the entire web stack: <div class="highlight-box">(1) <strong>DNS resolution</strong>: browser cache → OS cache → recursive resolver → authoritative nameserver → IP address. (2) <strong>TCP handshake</strong>: SYN → SYN-ACK → ACK. (3) <strong>TLS handshake</strong>: negotiate cipher, exchange certificates, establish encrypted session. (4) <strong>HTTP request</strong>: GET / with headers. (5) <strong>Server processes</strong>: routes request, queries DB, renders response. (6) <strong>Browser renders</strong>: parse HTML → DOM → CSSOM → render tree → layout → paint.</div>', tip:'This question tests breadth — cover all layers, then offer to go deep on any.' },
+      ]},
+    ],
+    challenges:[
+      { title:'Implement Middleware in Express', diff:'medium', desc:'Write a reusable <strong>authentication middleware</strong> for Express.js that validates JWT tokens and protects routes.',
+        input:'GET /api/profile with Authorization: Bearer <token>', output:'Decoded user attached to req.user, or 401 Unauthorized',
+        code:`<span class="kw">const</span> jwt = <span class="fn">require</span>(<span class="str">'jsonwebtoken'</span>);
+
+<span class="kw">function</span> <span class="fn">authMiddleware</span>(req, res, next) {
+  <span class="kw">const</span> authHeader = req.headers.authorization;
+
+  <span class="kw">if</span> (!authHeader?.startsWith(<span class="str">'Bearer '</span>)) {
+    <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">401</span>).<span class="fn">json</span>({
+      error: <span class="str">'Missing or malformed token'</span>
+    });
+  }
+
+  <span class="kw">const</span> token = authHeader.<span class="fn">split</span>(<span class="str">' '</span>)[<span class="num">1</span>];
+
+  <span class="kw">try</span> {
+    <span class="kw">const</span> decoded = jwt.<span class="fn">verify</span>(token, process.env.JWT_SECRET);
+    req.user = decoded; <span class="cm">// Attach to request</span>
+    <span class="fn">next</span>();
+  } <span class="kw">catch</span> (err) {
+    <span class="kw">if</span> (err.name === <span class="str">'TokenExpiredError'</span>) {
+      <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">401</span>).<span class="fn">json</span>({ error: <span class="str">'Token expired'</span> });
+    }
+    <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">401</span>).<span class="fn">json</span>({ error: <span class="str">'Invalid token'</span> });
+  }
+}
+
+<span class="cm">// Usage</span>
+app.<span class="fn">get</span>(<span class="str">'/api/profile'</span>, authMiddleware, (req, res) => {
+  res.<span class="fn">json</span>({ user: req.user });
+});`,
+        time:'O(1)', space:'O(1)', lang:'Node.js / Express' },
+    ],
+    tips:['Full stack interviews test breadth — know the basics of each layer even if you specialize.','For any feature, be able to trace the full request: browser → DNS → server → DB → response.','Security is expected: mention HTTPS, CORS, CSRF protection, SQL injection prevention proactively.','Discuss database indexing even for backend questions — it shows you think about performance.','Deployment knowledge signals maturity: CI/CD, environment variables, secrets management, rollback strategy.']
+  },
+];
+
+// ===================== RENDER ROLES GRID =====================
+function renderHomePage() {
+  const ticker = document.getElementById('ticker');
+  const grid = document.getElementById('roles-grid');
+  const tickerItems = ROLES.map(r => `<div class="ticker-item"><span>✦</span>${r.name}</div>`).join('') +
+    ROLES.map(r => `<div class="ticker-item"><span>✦</span>${r.name}</div>`).join('');
+  ticker.innerHTML = tickerItems;
+
+  grid.innerHTML = ROLES.map(r => `
+    <div class="role-card" onclick="openRole('${r.id}')">
+      <div class="role-icon">${r.icon}</div>
+      <div class="role-name">${r.name}</div>
+      <div class="role-count">${r.qa.reduce((s,t)=>s+t.items.length,0)} questions · ${r.challenges.length} challenges</div>
+      <div class="role-arrow">↗</div>
+    </div>
+  `).join('') + `
+    <div class="role-card" style="background:linear-gradient(135deg,rgba(110,107,255,0.08),rgba(0,212,170,0.05));border-color:rgba(110,107,255,0.2);opacity:0.7;cursor:default">
+      <div class="role-icon" style="background:rgba(110,107,255,0.15)">+</div>
+      <div class="role-name">More Coming Soon</div>
+      <div class="role-count" style="color:var(--accent)">Expanding weekly</div>
+    </div>`;
+}
+
+// ===================== PAGE ROUTING =====================
+let currentRole = null;
+
+function showPage(name) {
+  const pages = document.querySelectorAll('.page');
+
+  // Hide everything
+  pages.forEach(p => {
+    p.classList.remove('active', 'animating');
+    p.style.display = 'none';
+  });
+
+  const target = document.getElementById('page-' + name);
+  if (!target) { console.error('Page not found: page-' + name); return; }
+
+  // Show target
+  target.style.display = 'block';
+  target.classList.add('active');
+
+  // Trigger animation on next frame
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      target.classList.add('animating');
+    });
+  });
+
+  window.scrollTo(0, 0);
+}
+
+function scrollToRoles() {
+  const el = document.getElementById('roles-section');
+  if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 80);
+}
+
+function openRole(id) {
+  currentRole = ROLES.find(r => r.id === id);
+  if (!currentRole) return;
+  renderRolePage(currentRole);
+  showPage('role');
+}
+
+function goHome() {
+  showPage('home');
+}
+
+function goHomeAndScroll() {
+  showPage('home');
+  setTimeout(scrollToRoles, 150);
+}
+
+// ===================== RENDER ROLE PAGE =====================
+function renderRolePage(role) {
+  document.getElementById('rh-icon').textContent = role.icon;
+  document.getElementById('rh-title').textContent = role.name;
+  document.getElementById('rh-desc').textContent = role.desc;
+  const totalQ = role.qa.reduce((s,t) => s + t.items.length, 0);
+  document.getElementById('rh-meta').innerHTML = `
+    <span class="meta-badge q">📋 ${totalQ} Questions</span>
+    <span class="meta-badge c">💻 ${role.challenges.length} Coding Challenges</span>
+    <span class="meta-badge t">🎯 ${role.topics.length} Topics</span>`;
+
+  // Sidebar
+  const sidebar = document.getElementById('role-sidebar');
+  sidebar.innerHTML = `<div class="sidebar-section">
+    <div class="sidebar-label">Topics</div>
+    ${role.topics.map((t,i) => `<div class="sidebar-item ${i===0?'active':''}" onclick="scrollToTopic('${t}',this)">${t}<span class="scount">${(role.qa.find(q=>q.topic===t)?.items.length||0) || '–'}</span></div>`).join('')}
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+    <div class="sidebar-label">Jump To</div>
+    <div class="sidebar-item" onclick="switchTabAndScroll('coding')">💻 Coding Challenges</div>
+    <div class="sidebar-item" onclick="switchTabAndScroll('tips')">🎯 Interview Tips</div>
+  </div>`;
+
+  // Render tabs
+  renderQATab(role);
+  renderCodingTab(role);
+  renderTipsTab(role);
+
+  // Reset tabs
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===0));
+  document.getElementById('tab-qa').style.display = '';
+  document.getElementById('tab-coding').style.display = 'none';
+  document.getElementById('tab-tips').style.display = 'none';
+}
+
+function renderQATab(role) {
+  const totalQ = role.qa.reduce((s,t) => s + t.items.length, 0);
+  let html = `<div class="progress-bar-wrap">
+    <div class="progress-bar-label"><span>Your Progress</span><span>0 / ${totalQ} completed</span></div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:0%"></div></div>
+  </div>`;
+
+  role.qa.forEach(section => {
+    html += `<div class="topic-header" id="topic-${section.topic.replace(/\s+/g,'_')}">
+      <div class="topic-title">${section.topic}</div>
+      <div class="topic-desc">${section.items.length} questions covering core concepts asked in real interviews.</div>
+    </div>`;
+    section.items.forEach((item, i) => {
+      const diffClass = item.diff === 'easy' ? 'diff-easy' : item.diff === 'medium' ? 'diff-medium' : 'diff-hard';
+      html += `<div class="qa-card" id="qa-${section.topic}-${i}">
+        <div class="qa-question" onclick="toggleQA(this.parentElement)">
+          <span class="qa-num">Q${(i+1).toString().padStart(2,'0')}</span>
+          <span class="qa-q-text">${item.q}</span>
+          <div class="qa-badges"><span class="diff-badge ${diffClass}">${item.diff}</span></div>
+          <span class="qa-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-text">${item.a}</div>
+          ${item.tip ? `<div class="qa-tip"><span class="qa-tip-label">💡 Pro Tip</span><span class="qa-tip-text">${item.tip}</span></div>` : ''}
+        </div>
+      </div>`;
+    });
+  });
+  document.getElementById('tab-qa').innerHTML = html;
+}
+
+function renderCodingTab(role) {
+  let html = `<div class="topic-header"><div class="topic-title">Coding Challenges</div><div class="topic-desc">Hands-on challenges directly asked in technical screens. Understand the pattern, not just the answer.</div></div>`;
+  role.challenges.forEach((ch, i) => {
+    const diffClass = ch.diff === 'easy' ? 'diff-easy' : ch.diff === 'medium' ? 'diff-medium' : 'diff-hard';
+    html += `<div class="challenge-card">
+      <div class="challenge-header">
+        <div class="challenge-title-row">
+          <span class="challenge-icon">💻</span>
+          <span class="challenge-name">${ch.title}</span>
+        </div>
+        <div class="challenge-meta">
+          <span class="diff-badge ${diffClass}">${ch.diff}</span>
+          <span class="diff-badge" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted)">${ch.lang}</span>
+        </div>
+      </div>
+      <div class="challenge-body">
+        <div class="challenge-desc">${ch.desc}</div>
+        <div class="io-row">
+          <div class="io-box"><div class="io-label">Input</div><div class="io-val">${ch.input}</div></div>
+          <div class="io-box"><div class="io-label">Output</div><div class="io-val">${ch.output}</div></div>
+        </div>
+        <button class="solution-toggle" onclick="toggleSolution(this)">▶ Show Solution</button>
+        <div class="solution">
+          <div class="code-block">
+            <div class="code-block-header">
+              <div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div>
+              <span class="code-lang">${ch.lang}</span>
+            </div>
+            <pre>${ch.code}</pre>
+          </div>
+          <div class="complexity-row">
+            <div class="complexity-badge">Time: <span>${ch.time}</span></div>
+            <div class="complexity-badge">Space: <span>${ch.space}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('tab-coding').innerHTML = html;
+}
+
+function renderTipsTab(role) {
+  let html = `<div class="topic-header"><div class="topic-title">Interview Tips</div><div class="topic-desc">Insider advice from people who've interviewed at top companies for this exact role.</div></div>`;
+  role.tips.forEach((tip, i) => {
+    html += `<div class="qa-card" style="margin-bottom:12px">
+      <div style="padding:20px 24px;display:flex;gap:14px;align-items:flex-start">
+        <span style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);background:rgba(240,192,96,0.1);border:1px solid rgba(240,192,96,0.2);padding:3px 8px;border-radius:5px;flex-shrink:0;margin-top:2px">TIP ${(i+1).toString().padStart(2,'0')}</span>
+        <span style="font-size:0.9rem;line-height:1.65;color:var(--muted)">${tip}</span>
+      </div>
+    </div>`;
+  });
+  document.getElementById('tab-tips').innerHTML = html;
+}
+
+// ===================== INTERACTIONS =====================
+function toggleQA(card) {
+  card.classList.toggle('open');
+}
+function toggleSolution(btn) {
+  const sol = btn.nextElementSibling;
+  sol.classList.toggle('open');
+  btn.textContent = sol.classList.contains('open') ? '▼ Hide Solution' : '▶ Show Solution';
+}
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-qa').style.display = name === 'qa' ? '' : 'none';
+  document.getElementById('tab-coding').style.display = name === 'coding' ? '' : 'none';
+  document.getElementById('tab-tips').style.display = name === 'tips' ? '' : 'none';
+}
+function switchTabAndScroll(name) {
+  const tabs = document.querySelectorAll('.tab');
+  const names = ['qa','coding','tips'];
+  tabs.forEach((t,i) => t.classList.toggle('active', names[i] === name));
+  document.getElementById('tab-qa').style.display = name === 'qa' ? '' : 'none';
+  document.getElementById('tab-coding').style.display = name === 'coding' ? '' : 'none';
+  document.getElementById('tab-tips').style.display = name === 'tips' ? '' : 'none';
+  window.scrollTo({ top: 200, behavior: 'smooth' });
+}
+function scrollToTopic(topic, el) {
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  const topicId = 'topic-' + topic.replace(/\s+/g,'_');
+  const el2 = document.getElementById(topicId);
+  if (el2) el2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Navbar scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Init — script is at bottom of body so DOM is already ready
+renderHomePage();
+
+// Clean page init
+(function initPages() {
+  const pages = document.querySelectorAll('.page');
+  pages.forEach(p => {
+    p.classList.remove('active', 'animating');
+    p.style.display = 'none';
+  });
+  const home = document.getElementById('page-home');
+  if (home) {
+    home.style.display = 'block';
+    home.classList.add('active', 'animating');
+  }
+})();
+</script>
+</body>
+</html>
